@@ -1,7 +1,7 @@
 const backendURL = "http://classwork.engr.oregonstate.edu:63037";
 
 const Home = () => {
-
+    // asks the user 
     const handleReset = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to reset the database?"
@@ -9,6 +9,7 @@ const Home = () => {
 
     if (!confirmed) return;
     try {
+      // Sends the request to reset the database and seed it
       const response = await fetch(`${backendURL}/reset`, {
         method: "POST",
       });

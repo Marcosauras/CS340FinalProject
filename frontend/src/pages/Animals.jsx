@@ -3,46 +3,6 @@ import { useEffect, useState } from "react";
 
 const Animals = () => {
   const navigate = useNavigate();
-  // This is an example of how the data would look coming in
-  // const animals = [
-  //   {
-  //     animalID: 1,
-  //     name: "Roman",
-  //     species: "dog",
-  //     breed: "greyhound",
-  //     sex: "male",
-  //     age: 2
-  //   },
-
-  //   {
-  //     animalID: 2,
-  //     name: "Calliope",
-  //     species: "cat",
-  //     breed: null,
-  //     sex: "female",
-  //     age: null
-  //   },
-
-  //   {
-  //     animalID: 3,
-  //     name: "Arthur Pendragon",
-  //     species: null,
-  //     breed: null,
-  //     sex: "male",
-  //     age: 3
-  //   },
-
-  //   {
-  //     animalID: 4,
-  //     name: "Bella",
-  //     species: null,
-  //     breed: null,
-  //     sex: null,
-  //     age: null
-  //   }
-  // ];
-
-
     const [animals, setAnimals] = useState([]);
 
   const backendURL = "http://classwork.engr.oregonstate.edu:63037";
