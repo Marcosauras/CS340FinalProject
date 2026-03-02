@@ -1,0 +1,38 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 4px 12px #426281;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+thead {
+  background: #2c3e50;
+  color: white;
+}
+/* citation for making every other row in the table have a slightly different background color*/
+/* 2/12/2026 */
+/* Adapted from */
+/* URL: https://stackoverflow.com/questions/3084261/alternate-table-row-color-using-css */
+tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}
