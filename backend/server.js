@@ -6,7 +6,7 @@ const app = express();
 
 // Middleware to allow cross-origin requests
 const cors = require('cors');
-const PORT = 63037;
+const PORT = 63035;
 const MY_ONID = "hamimarc";
 
 // If on FLIP or classwork, use cors() middleware to allow cross-origin requests from the frontend with your port number:
@@ -17,38 +17,8 @@ app.use(express.json()); // this is needed for post requests, good thing to know
             
 // importing all the routes
 const animalRoutes = require("./routes/animals");
-
 // use the animal routes
 app.use("/animals", animalRoutes)
-
-
-// Route handler 
-app.get('/', async (req, res) => {
-    try {
-        // Define queries
-        const query1 = 'DROP TABLE IF EXISTS diagnostic;';
-        const query2 = 'CREATE TABLE diagnostic(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(255) NOT NULL);';
-        const query3 = `INSERT INTO diagnostic (text) VALUES ("MySQL and React is working for ${MY_ONID}!")`;
-        const query4 = 'SELECT * FROM diagnostic;';
-
-        // Execute the queries
-        await db.query(query1);
-        await db.query(query2);
-        await db.query(query3);
-
-        // Get the results
-        const [rows] = await db.query(query4);
-
-        // Send back the results in JSON
-        res.status(200).json(rows)
-
-    } catch (error) {
-        console.error("Error executing queries:", error);
-        // Send a generic error message to the browser
-        res.status(500).send("An error occurred while executing the database queries.");
-    }
-});
-
 // ressets the database with seeded info
 app.post("/reset", async (req, res) => {
   try {
@@ -59,6 +29,8 @@ app.post("/reset", async (req, res) => {
     res.status(500).send("There was an error when resetting the database");
   }
 });
+
+
 
 // Tell express what port to listen on 
 app.listen(PORT, function () {

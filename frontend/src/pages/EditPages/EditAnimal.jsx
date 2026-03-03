@@ -1,98 +1,82 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
+
 const EditAnimal = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const backendURL = "http://classwork.engr.oregonstate.edu:63035";
 
-  const backendURL = 'http://classwork.engr.oregonstate.edu:63037';
+    // Set the form to empty strings
+    const [form, setForm] = useState({
+        name: "",
+        species: "",
+        breed: "",
+        sex: "",
+        age: "",
+    });
 
-  // form state for the animal being edited
+    // Gets the animal data from the database to fill the form
+    useEffect(() => {
+        fetch(backendURL + "/animals")
+            .then(res => res.json())
+            .then(data => {
+                const animalID = Number(id);
+                const found = data.find((a) => a.animalID === animalID);
 
-  const [form, setForm] = useState({
-    name: '',
-    species: '',
-    breed: '',
-    sex: '',
-    age: '',
-  });
+                if (!found) {
+                    console.error("Animal not found");
+                    return;
+                }
+                // sets the form inputs with info found on the animal or leaves it empty if nothing is found
+                setForm({
+                    name: found.name ?? "",
+                    species: found.species ?? "",
+                    breed: found.breed ?? "",
+                    sex: found.sex ?? "",
+                    age: found.age ?? "",
+                });
+            })
+            .catch(err => console.error("Error loading animal:", err));
+    }, [id]);
 
-  useEffect(() => {
-    if (!id) {
-      console.warn('EditAnimal: missing id param');
-      return;
-    }
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
 
-    async function fetchAnimal() {
-      console.log(`Fetching animal ${id}`);
-      try {
-        const res = await fetch(`${backendURL}/animals/${id}`);
-        console.log('fetch response status', res.status);
-        if (res.ok) {
-          const data = await res.json();
-          console.log('animal data', data);
-          setForm({
-            name: data.name ?? '',
-            species: data.species ?? '',
-            breed: data.breed ?? '',
-            sex: data.sex ?? '',
-            age: data.age ?? '',
-          });
-        } else {
-          console.error('Failed to load animal', res.status);
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        // set values to null if it is not found
+        try {
+            console.log(backendURL + "/animals/update")
+            console.log(Number(id), form.name, form.species, form.breed, form.sex)
+            const response = await fetch(backendURL + "/animals/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    animalID: Number(id),
+                    name: form.name,
+                    species: form.species || null,
+                    breed: form.breed || null,
+                    sex: form.sex || null,
+                    age: form.age === "" ? null : Number(form.age),
+                }),
+            });
+            if (!response.ok) {
+                console.log("Error updating animal", response)
+                return;
+            }
+
+            // Load the animals page to show the updated database
+            navigate("/animals");
+        } catch (err) {
+            console.error("Animal Update failed", err);
         }
-      } catch (err) {
-        console.error('Error fetching animal:', err);
-      }
-    }
+    };
 
-    fetchAnimal();
-  }, [id]);
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = { ...form, animalID: id };
-    if (payload.age === '') {
-      payload.age = null;
-    } else {
-      payload.age = Number(payload.age);
-      if (isNaN(payload.age)) payload.age = null;
-    }
-
-    try {
-      const response = await fetch(`${backendURL}/animals/update`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        console.log('Animal updated successfully.');
-        navigate('/animals');
-      } else {
-        const text = await response.text();
-        console.error('Error updating animal:', response.status, text);
-      }
-    } catch (error) {
-      console.error('Error during form submission:', error);
-    }
-  };
-
-  return (
-    <div>
-      <h2>Edit Animal</h2>
-
-      <p>
-        <Link to="/animals">← Back</Link>
-      </p>
-
-      <form onSubmit={onSubmit}>
+    return (
         <div>
           <label>
             Name{' '}

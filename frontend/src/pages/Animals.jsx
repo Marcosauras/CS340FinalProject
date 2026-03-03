@@ -5,7 +5,7 @@ const Animals = () => {
   const navigate = useNavigate();
     const [animals, setAnimals] = useState([]);
 
-  const backendURL = "http://classwork.engr.oregonstate.edu:63037";
+  const backendURL = "http://classwork.engr.oregonstate.edu:63035";
 
   // Fetch animals from database
   useEffect(() => {
