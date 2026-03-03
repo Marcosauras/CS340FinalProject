@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 
 const Animals = () => {
   const navigate = useNavigate();
-    const [animals, setAnimals] = useState([]);
+  const [animals, setAnimals] = useState([]);
 
-  const backendURL = "http://classwork.engr.oregonstate.edu:63035";
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
   // Fetch animals from database
   useEffect(() => {

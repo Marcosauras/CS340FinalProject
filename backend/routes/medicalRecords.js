@@ -7,10 +7,10 @@ const db = require("../database/db-connector");
 // -- Adapted from:
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
-// Get all fosters in the database
+// Get all Medical Records in the database
 router.get("/", async (req, res) => {
   try {
-    const [rows] = await db.query("CALL sp_GetFosters();");
+    const [rows] = await db.query("CALL sp_GetMedicalRecords();");
     res.json(rows);
   } catch (error) {
     console.error(error);

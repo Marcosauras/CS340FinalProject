@@ -9,7 +9,7 @@ const db = require('../database/db-connector');
 // Gets all the animals in the database
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Animals;');
+    const [rows] = await db.query('CALL sp_GetAnimals();');
     res.json(rows);
   } catch (error) {
     res.status(500).send('Database error');

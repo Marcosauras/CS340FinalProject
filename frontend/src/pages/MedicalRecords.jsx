@@ -1,31 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const MedicalRecords = () => {
   const navigate = useNavigate();
-  const animalRecords = [
-    {
-      medicalRecordID: 1,
-      animalID: 1,
-      animalName: "Roman",
-      appointmentDate: "2026-01-20 10:30:00",
-      note: "Stomach pains"
-    },
-    {
-      medicalRecordID: 2,
-      animalID: 1,
-      animalName: "Roman",
-      appointmentDate: "2026-01-27 10:30:00",
-      note: null
-    },
-    {
-      medicalRecordID: 3,
-      animalID: 4,
-      animalName: "Bella",
-      appointmentDate: null,
-      note: "Bella is limping — schedule vet"
-    }
-  ];
+  const [animalRecords, setAnimalRecords] = useState([]);
 
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+
+  // Grab all the medical records from database
+  useEffect(() => {
+    fetch(`${backendURL}/medicalRecords`)
+      .then(res => res.json())
+      .then(data => setAnimalRecords(data))
+      .catch(err => console.error("Error fetching medical records:", err));
+  }, []);
 
   // This will send the user to the edit page
   function handleEdit(medicalRecordID) {

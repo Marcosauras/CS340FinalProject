@@ -3,6 +3,26 @@
 -- Adapted from:
 -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
+-- Gets all animals
+DROP PROCEDURE IF EXISTS sp_GetAnimals;
+DELIMITER //
+
+CREATE PROCEDURE sp_GetAnimals()
+BEGIN
+    SELECT
+        animalID,
+        name,
+        species,
+        breed,
+        sex,
+        age
+    FROM Animals
+    ORDER BY animalID;
+END //
+
+DELIMITER ;
+
+
 -- Creates a new animal and adds them to the database
 DROP PROCEDURE IF EXISTS sp_CreateAnimal;
 
@@ -84,6 +104,26 @@ END //
 
 DELIMITER ;
 
+
+-- Gets all fosters 
+DROP PROCEDURE IF EXISTS sp_GetFosters;
+DELIMITER //
+
+CREATE PROCEDURE sp_GetFosters()
+BEGIN
+    SELECT
+        fosterID,
+        name,
+        phone,
+        email,
+        capacity
+    FROM Fosters
+    ORDER BY fosterID;
+END //
+
+DELIMITER ;
+
+
 -- Creates a foster (a foster parent)
 DROP PROCEDURE IF EXISTS sp_CreateFoster;
 
@@ -103,6 +143,28 @@ BEGIN
     SELECT LAST_INSERT_ID() AS 'new_id';
 END //
 DELIMITER ;
+
+
+-- Grabs all the Adopters
+
+DROP PROCEDURE IF EXISTS sp_GetAdopters;
+DELIMITER //
+
+CREATE PROCEDURE sp_GetAdopters()
+BEGIN
+    SELECT
+        adopterID,
+        name,
+        phone,
+        email,
+        note
+    FROM Adopters
+    ORDER BY adopterID;
+END //
+
+DELIMITER ;
+
+
 
 -- Creates an adopter
 DROP PROCEDURE IF EXISTS sp_CreateAdopter;
@@ -124,6 +186,25 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Grabs all the medical records
+DROP PROCEDURE IF EXISTS sp_GetMedicalRecords;
+DELIMITER //
+
+CREATE PROCEDURE sp_GetMedicalRecords()
+BEGIN
+    SELECT
+        MedicalRecords.medicalRecordID,
+        MedicalRecords.animalID,
+        Animals.name AS animalName,
+        MedicalRecords.appointmentDate,
+        MedicalRecords.note
+    FROM MedicalRecords
+    JOIN Animals ON Animals.animalID = MedicalRecords.animalID
+    ORDER BY MedicalRecords.medicalRecordID;
+END //
+
+DELIMITER ;
+
 -- Creates a medical record
 DROP PROCEDURE IF EXISTS sp_CreateFoster;
 
@@ -143,6 +224,31 @@ BEGIN
     SELECT LAST_INSERT_ID() AS 'new_id';
 END //
 DELIMITER ;
+
+-- Gets all applications
+DROP PROCEDURE IF EXISTS sp_GetApplications;
+DELIMITER //
+
+CREATE PROCEDURE sp_GetApplications()
+BEGIN
+    SELECT
+    Applications.applicationID,
+    Applications.adopterID,
+    -- grabbing names to make it easier to understand who the ID matches to
+    Adopters.name AS adopterName,
+    Applications.animalID,
+    Animals.name AS animalName,
+    Applications.applicationDate AS applicationDate,
+    Applications.status,
+    Applications.adoptedDate AS adoptedDate
+    FROM Applications 
+    JOIN Animals ON Animals.animalID = Applications.animalID
+    JOIN Adopters ON Adopters.adopterID = Applications.adopterID
+    ORDER BY applicationDate DESC;
+END //
+
+DELIMITER ;
+
 
 -- Creates an application
 DROP PROCEDURE IF EXISTS sp_CreateApplication;
@@ -181,6 +287,31 @@ BEGIN
     SELECT LAST_INSERT_ID() INTO p_id;
     SELECT LAST_INSERT_ID() AS 'new_id';
 END //
+DELIMITER ;
+
+-- Grab all the animal Foster Details
+DROP PROCEDURE IF EXISTS sp_GetAnimalFosterDetails;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_GetAnimalFosterDetails()
+BEGIN
+    SELECT
+        AnimalFosterDetails.animalFosterDetailID,
+        AnimalFosterDetails.animalID,
+        Animals.name AS animalName,
+        AnimalFosterDetails.fosterID,
+        Fosters.name AS fosterName,
+        AnimalFosterDetails.startDate,
+        AnimalFosterDetails.endDate
+    FROM AnimalFosterDetails
+    JOIN Animals 
+        ON Animals.animalID = AnimalFosterDetails.animalID
+    JOIN Fosters 
+        ON Fosters.fosterID = AnimalFosterDetails.fosterID
+    ORDER BY AnimalFosterDetails.startDate DESC;
+END //
+
 DELIMITER ;
 
 -- Creates an animal foster entry with details on who the animal is staying with and for how long

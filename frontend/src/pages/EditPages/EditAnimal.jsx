@@ -76,32 +76,41 @@ const EditAnimal = () => {
     };
 
 
-    return (
+  return (
+    <div>
+      <h2>Edit Animal</h2>
+
+      <form onSubmit={onSubmit}>
         <div>
           <label>
-            Name{' '}
+            Name{" "}
             <input name="name" value={form.name} onChange={onChange} required />
           </label>
         </div>
+
         <div>
           <label>
-            Species{' '}
+            Species{" "}
             <input name="species" value={form.species} onChange={onChange} />
           </label>
         </div>
+
         <div>
           <label>
-            Breed <input name="breed" value={form.breed} onChange={onChange} />
+            Breed{" "}
+            <input name="breed" value={form.breed} onChange={onChange} />
           </label>
         </div>
+
         <div>
           <label>
             Sex <input name="sex" value={form.sex} onChange={onChange} />
           </label>
         </div>
+
         <div>
           <label>
-            Age{' '}
+            Age{" "}
             <input
               name="age"
               type="number"
@@ -111,8 +120,9 @@ const EditAnimal = () => {
             />
           </label>
         </div>
-        <button type="submit">Save</button>{' '}
-        <button type="button" onClick={() => navigate('/animals')}>
+
+        <button type="submit">Save</button>{" "}
+        <button type="button" onClick={() => navigate("/animals")}>
           Cancel
         </button>
       </form>

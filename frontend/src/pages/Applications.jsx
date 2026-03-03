@@ -1,50 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Applications = () => {
   const navigate = useNavigate();
+  const [applications, setApplications] = useState([]);
 
-  const applications = [
-    {
-      applicationID: 1,
-      adopterID: 1,
-      adopterName: "Ben",
-      animalID: 4,
-      animalName: "Bella",
-      applicationDate: "2026-02-01 10:14:00",
-      status: "pending",
-      adoptedDate: null
-    },
-    {
-      applicationID: 2,
-      adopterID: 3,
-      adopterName: "Ben",
-      animalID: 3,
-      animalName: "Arthur Pendragon",
-      applicationDate: "2026-01-05 6:02:00",
-      status: "approved",
-      adoptedDate: "2026-01-10"
-    },
-    {
-      applicationID: 3,
-      adopterID: 2,
-      adopterName: "Lancelot",
-      animalID: 3,
-      animalName: "Arthur Pendragon",
-      applicationDate: "2026-01-10 11:00:00",
-      status: "denied",
-      adoptedDate: null
-    },
-    {
-      applicationID: 4,
-      adopterID: 2,
-      adopterName: "Lancelot",
-      animalID: 4,
-      animalName: "Bella",
-      applicationDate: "2026-02-02 11:30:00",
-      status: "pending",
-      adoptedDate: null
-    }
-  ];
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+
+  // Fetch applications from database
+  useEffect(() => {
+    fetch(`${backendURL}/applications`)
+      .then(res => res.json())
+      .then(data => setApplications(data))
+      .catch(err => console.error("Error fetching applications:", err));
+  }, []);
 
   // This will send the user to the edit page
   function handleEdit(appID) {
@@ -56,7 +25,6 @@ const Applications = () => {
     const ok = window.confirm("Later this will delete the Application Data in this row");
     if (!ok) return;
   }
-
   return (
     <div>
       <h3>Applications</h3>
@@ -82,8 +50,8 @@ const Applications = () => {
           {applications.map((application) => (
             <tr key={application.applicationID}>
               <td>{application.applicationID}</td>
-              <td>{application.adopterName}: {application.adopterID}</td>
-              <td>{application.animalName}: {application.animalID}</td>
+              <td>{application.adopterID}: {application.adopterName}</td>
+              <td>{application.animalID}: {application.animalName}</td>
               <td>{application.applicationDate}</td>
               <td>{application.status}</td>
               <td>{application.adoptedDate ?? "NULL"}</td>

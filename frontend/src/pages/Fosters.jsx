@@ -1,32 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Fosters = () => {
   const navigate = useNavigate();
+  const [fosters, setFosters] = useState([]);
 
-  // How the data will look once Database is hooked up
-  const fosters = [
-    {
-      fosterID: 1,
-      name: "Joey",
-      phone: "804-832-2424",
-      email: "JoeyFosters@example.com",
-      capacity: 1
-    },
-    {
-      fosterID: 2,
-      name: "Lannie",
-      phone: "621-321-1256",
-      email: "NotACat@example.come",
-      capacity: 4
-    },
-    {
-      fosterID: 3,
-      name: "Donna",
-      phone: "292-291-2033",
-      email: "Donna@example.com",
-      capacity: 2
-    }
-  ];
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+
+  // Fetch fosters from database
+  useEffect(() => {
+    fetch(`${backendURL}/fosters`)
+      .then(res => res.json())
+      .then(data => setFosters(data))
+      .catch(err => console.error("Error fetching fosters:", err));
+  }, []);
 
   // Handles the editing of the current row
   function handleEdit(fosterID) {

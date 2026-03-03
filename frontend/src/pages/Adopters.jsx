@@ -1,33 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 
 const Adopters = () => {
-  const navigate = useNavigate();
-
   // Example of how the data would look coming in
-  const adopters = [
-    {
-      adopterID: 1,
-      name: "Ben",
-      phone: "832-123-8429",
-      email: "Ben@example.com",
-      note: "Looking for a small animal"
-    },
-    {
-      adopterID: 2,
-      name: "Lancelot",
-      phone: "804-832-2932",
-      email: "Lancelot@example.com",
-      note: null
-    },
-    {
-      adopterID: 3,
-      name: "Merlin",
-      phone: "804-832-7987",
-      email: "CourtMagician@example.com",
-      note: null
-    }
-  ];
+  const navigate = useNavigate();
+  const [adopters, setAdopters] = useState([]);
+
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+
+  // Fetch applications from database
+  useEffect(() => {
+    fetch(`${backendURL}/adopters`)
+      .then(res => res.json())
+      .then(data => setAdopters(data))
+      .catch(err => console.error("Error fetching adopters:", err));
+  }, []);
 
   // This will send the user to the edit page
   function handleEdit(AdopterID) {

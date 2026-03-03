@@ -6,19 +6,30 @@ const app = express();
 
 // Middleware to allow cross-origin requests
 const cors = require('cors');
-const PORT = 63035;
+const PORT = 63033;
 const MY_ONID = "hamimarc";
 
 // If on FLIP or classwork, use cors() middleware to allow cross-origin requests from the frontend with your port number:
 // EX (local): http://localhost:3037
-// EX (FLIP/classwork) http://classwork.engr.oregonstate.edu:63037
+// EX (FLIP/classwork) http://classwork.engr.oregonstate.edu:63033
 app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests, good thing to know
             
 // importing all the routes
 const animalRoutes = require("./routes/animals");
-// use the animal routes
-app.use("/animals", animalRoutes)
+const fosterRoutes = require("./routes/fosters");
+const applicationRoutes = require("./routes/applications");
+const adoptersRoutes = require("./routes/adopters");
+const medicalRecordRoutes = require("./routes/medicalRecords");
+const animalFosterDetailsRoutes = require("./routes/animalFosterDetails")
+
+// use the routes
+app.use("/animals", animalRoutes);
+app.use("/applications", applicationRoutes);
+app.use("/fosters", fosterRoutes);
+app.use("/adopters", adoptersRoutes);
+app.use("/medicalRecords", medicalRecordRoutes);
+app.use("/animalFosterDetails", animalFosterDetailsRoutes)
 // ressets the database with seeded info
 app.post("/reset", async (req, res) => {
   try {
