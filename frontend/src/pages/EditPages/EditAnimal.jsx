@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 const EditAnimal = () => {
@@ -78,78 +78,46 @@ const EditAnimal = () => {
 
     return (
         <div>
-            <h2>Edit Animal</h2>
-
-            <p>
-                <Link to="/animals">← Back</Link>
-            </p>
-
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label>
-                        Name{" "}
-                        <input
-                            name="name"
-                            value={form.name}
-                            onChange={onChange}
-                            required
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Species{" "}
-                        <input
-                            name="species"
-                            value={form.species}
-                            onChange={onChange}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Breed{" "}
-                        <input
-                            name="breed"
-                            value={form.breed}
-                            onChange={onChange}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Sex{" "}
-                        <input
-                            name="sex"
-                            value={form.sex}
-                            onChange={onChange}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Age{" "}
-                        <input
-                            name="age"
-                            type="number"
-                            min="0"
-                            value={form.age}
-                            onChange={onChange}
-                        />
-                    </label>
-                </div>
-
-                <button type="submit">Save</button>{" "}
-                <button type="button" onClick={() => navigate("/animals")}>
-                    Cancel
-                </button>
-            </form>
+          <label>
+            Name{' '}
+            <input name="name" value={form.name} onChange={onChange} required />
+          </label>
         </div>
-    );
+        <div>
+          <label>
+            Species{' '}
+            <input name="species" value={form.species} onChange={onChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Breed <input name="breed" value={form.breed} onChange={onChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Sex <input name="sex" value={form.sex} onChange={onChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Age{' '}
+            <input
+              name="age"
+              type="number"
+              min="0"
+              value={form.age}
+              onChange={onChange}
+            />
+          </label>
+        </div>
+        <button type="submit">Save</button>{' '}
+        <button type="button" onClick={() => navigate('/animals')}>
+          Cancel
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default EditAnimal;
