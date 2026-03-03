@@ -37,22 +37,35 @@ router.post("/create", async (req, res) => {
 });
 
 // Updates the animal
-router.post("/update", async (req, res) => {
+router.post("/update", async function (req, res) {
   try {
     const data = req.body;
 
-    await db.query("CALL sp_UpdateAnimal(?, ?, ?, ?, ?);", [
-      data.update_animal_id,
-      data.update_animal_name,
-      data.update_animal_species,
-      data.update_animal_breed,
-      data.update_animal_sex,
-      data.update_animal_age
+    if (isNaN(animalID)) {
+      return res.status(400).send("Invalid animal ID");
+    }
+
+    if (isNaN(parseInt(data.age))) {
+      data.age = null;
+    }
+
+    const query = "CALL sp_UpdateAnimal(?, ?, ?, ?, ?, ?);";
+    await db.query(query, [
+      data.animalID,
+      data.name,
+      data.species,
+      data.breed,
+      data.sex,
+      data.age,
     ]);
 
-    res.status(200).json({ message: "Updated successfully" });
   } catch (error) {
-    res.status(500).send("Database error");
+    console.error("Error executing update:", error);
+    res.status(500).json({
+      message: "Database error",
+      error: error.message,
+      code: error.code
+    });
   }
 });
 
