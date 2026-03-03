@@ -38,7 +38,7 @@ const Animals = () => {
       .then(data => setAnimals(data))
       .catch(err => console.error("Delete failed:", err));
   }
-
+  console.log(animals)
   return (
     <div>
       <h3>Animals</h3>
