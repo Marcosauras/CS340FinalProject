@@ -27,7 +27,7 @@ router.post("/create", async (req, res) => {
     if (isNaN(age)) age = null;
 
     const query = `CALL sp_CreateAnimal(?, ?, ?, ?, ?, @new_id);`;
-    await db.query(query, [data.name, data.species, data.breed, data.sex, data.age]);
+    await db.query(query, [data.name, data.species, data.breed, data.sex, age]);
 
     res.status(200).json({ message: "Animal created successfully" });
   } catch (err) {
@@ -36,37 +36,44 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// Updates the animal
-router.post("/update", async function (req, res) {
+// Update the animal
+router.post("/update", async (req, res) => {
   try {
     const data = req.body;
 
-    if (isNaN(animalID)) {
-      return res.status(400).send("Invalid animal ID");
+    const animalID = Number(data.animalID);
+    if (Number.isNaN(animalID)) {
+      return res.status(400).json({ message: "Invalid animal ID" });
     }
 
-    if (isNaN(parseInt(data.age))) {
-      data.age = null;
+    const age =
+      data.age === "" || data.age === null || data.age === undefined
+        ? null
+        : parseInt(data.age, 10);
+
+    if (age !== null && Number.isNaN(age)) {
+      return res.status(400).json({ message: "Invalid age" });
     }
 
     const query = "CALL sp_UpdateAnimal(?, ?, ?, ?, ?, ?);";
     await db.query(query, [
-      data.animalID,
+      animalID,
       data.name,
       data.species,
       data.breed,
       data.sex,
-      data.age,
+      age,
     ]);
 
-  } catch (error) {
-    console.error("Error executing update:", error);
-    res.status(500).json({
-      message: "Database error",
-      error: error.message,
-      code: error.code
-    });
-  }
+    return res.status(200).json({ message: "Animal updated successfully" });
+  }  catch (error) {
+  console.error("Error executing update:", error);
+  return res.status(500).json({
+    message: "Database error",
+    error: error.message,
+    code: error.code
+  });
+}
 });
 
 // Deletes an animal based on ID
