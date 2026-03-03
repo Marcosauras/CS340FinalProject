@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const AddAnimal = () => {
   const navigate = useNavigate();
-
+  const backendURL = "http://classwork.engr.oregonstate.edu:63035";
   const [formData, setForm] = useState({
     name: "",
     species: "",
@@ -24,7 +24,7 @@ const AddAnimal = () => {
 
   try {
     const response = await fetch(
-      "http://classwork.engr.oregonstate.edu:63037/animals/create",
+      backendURL + "/animals/create",
       {
         method: "POST",
         headers: {

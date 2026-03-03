@@ -1,46 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+
 const EditAnimal = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const backendURL = "http://classwork.engr.oregonstate.edu:63035";
 
-    // Example of what is expecting from the SELECT query
-    const animals = [
-        {
-            animalID: 1,
-            name: "Roman",
-            species: "dog",
-            breed: "greyhound",
-            sex: "male",
-            age: 2
-        },
-        {
-            animalID: 2,
-            name: "Calliope",
-            species: "cat",
-            breed: null,
-            sex: "female",
-            age: null
-        },
-        {
-            animalID: 3,
-            name: "Arthur Pendragon",
-            species: null,
-            breed: null,
-            sex: "male",
-            age: 3
-        },
-        {
-            animalID: 4,
-            name: "Bella",
-            species: null,
-            breed: null,
-            sex: null,
-            age: null
-        },
-    ];
-
+    // Set the form to empty strings
     const [form, setForm] = useState({
         name: "",
         species: "",
@@ -49,18 +16,28 @@ const EditAnimal = () => {
         age: "",
     });
 
+    // Gets the animal data from the database to fill the form
     useEffect(() => {
-        const animalID = Number(id);
-        const found = animals.find((a) => a.animalID === animalID);
+        fetch(backendURL + "/animals")
+            .then(res => res.json())
+            .then(data => {
+                const animalID = Number(id);
+                const found = data.find((a) => a.animalID === animalID);
 
-        // Auto fills the form and sets to empty if nothing is found (if it's NULL)
-        setForm({
-            name: found.name ?? "",
-            species: found.species ?? "",
-            breed: found.breed ?? "",
-            sex: found.sex ?? "",
-            age: found.age ?? "",
-        });
+                if (!found) {
+                    console.error("Animal not found");
+                    return;
+                }
+                // sets the form inputs with info found on the animal or leaves it empty if nothing is found
+                setForm({
+                    name: found.name ?? "",
+                    species: found.species ?? "",
+                    breed: found.breed ?? "",
+                    sex: found.sex ?? "",
+                    age: found.age ?? "",
+                });
+            })
+            .catch(err => console.error("Error loading animal:", err));
     }, [id]);
 
     const onChange = (e) => {
@@ -68,9 +45,34 @@ const EditAnimal = () => {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        navigate("/animals");
+        // set values to null if it is not found
+        try {
+            console.log(backendURL + "/animals/update")
+            console.log(Number(id), form.name, form.species, form.breed, form.sex)
+            const response = await fetch(backendURL + "/animals/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    animalID: Number(id),
+                    name: form.name,
+                    species: form.species || null,
+                    breed: form.breed || null,
+                    sex: form.sex || null,
+                    age: form.age === "" ? null : Number(form.age),
+                }),
+            });
+            if (!response.ok) {
+                console.log("Error updating animal", response)
+                return;
+            }
+
+            // Load the animals page to show the updated database
+            navigate("/animals");
+        } catch (err) {
+            console.error("Animal Update failed", err);
+        }
     };
 
 
