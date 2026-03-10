@@ -4,81 +4,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const EditApplication = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
-    // Example of the expected output from the SELECT query
-    const applications = [
-        {
-            applicationID: 1,
-            adopterID: 1,
-            animalID: 4,
-            applicationDate: "2026-02-01 10:14:00",
-            status: "pending",
-            adoptedDate: null
-        },
-        {
-            applicationID: 2,
-            adopterID: 3,
-            animalID: 3,
-            applicationDate: "2026-01-05 06:02:00",
-            status: "approved",
-            adoptedDate: "2026-01-10 06:15:00"
-        },
-        {
-            applicationID: 3,
-            adopterID: 2,
-            animalID: 3,
-            applicationDate: "2026-01-10 11:00:00",
-            status: "denied",
-            adoptedDate: null
-        },
-        {
-            applicationID: 4,
-            adopterID: 2,
-            animalID: 4,
-            applicationDate: "2026-02-02 11:30:00",
-            status: "pending",
-            adoptedDate: null
-        },
-    ];
-
-    // SELECT of * Animal IDS and names
-    const allAnimals = [
-        {
-            animalID: 1,
-            name: "Roman",
-        },
-
-        {
-            animalID: 2,
-            name: "Calliope",
-        },
-
-        {
-            animalID: 3,
-            name: "Arthur Pendragon",
-        },
-
-        {
-            animalID: 4,
-            name: "Bella",
-        }
-    ];
-
-    // SELECT of * Adopter IDS and names
-    const allAdopters = [
-        {
-            adopterID: 1,
-            name: "Ben"
-        },
-        {
-            adopterID: 2,
-            name: "Lancelot"
-        },
-        {
-            adopterID: 3,
-            name: "Merlin"
-        }
-    ];
+    const [allAnimals, setAllAnimals] = useState([])
+    const [allAdopters, setAllAdopters] = useState([])
 
     const [form, setForm] = useState({
         adopterID: "",
@@ -88,24 +17,73 @@ const EditApplication = () => {
         adoptedDate: "",
     });
 
+    // Gets the animal data from the database to fill the dropdown
+    useEffect(() => {
+        fetch(backendURL + "/animals")
+            .then(res => res.json())
+            .then(data => {
+                // if no animals are found return an error
+                if (!data) {
+                    console.error("No Animals found");
+                    return;
+                }
+
+                // set animals to hook to use in form
+                setAllAnimals(data)
+            })
+            .catch(err => console.error("Error loading animal:", err));
+    }, []);
+
+    // Gets the animal data from the database to fill the dropdown
+    useEffect(() => {
+        fetch(backendURL + "/adopters")
+            .then(res => res.json())
+            .then(data => {
+                // if no animals are found return an error
+                if (!data) {
+                    console.error("No Adopters found");
+                    return;
+                }
+
+                // set animals to hook to use in form
+                setAllAdopters(data)
+            })
+            .catch(err => console.error("Error loading animal:", err));
+    }, []);
 
     useEffect(() => {
-        const appID = Number(id);
-        const found = applications.find(a => a.applicationID === appID);
+        fetch(backendURL + "/applications")
+            .then(res => res.json())
+            .then(data => {
+                const applicationID = Number(id);
+                const found = data.find((a) => a.applicationID === applicationID);
 
-        if (!found) {
-            setError(`No application found with ID ${id}`);
-            return;
-        }
+                if (!found) {
+                    console.error("application not found");
+                    return;
+                }
 
-        // auto fills the form with the info that was found
-        setForm({
-            adopterID: String(found.adopterID),
-            animalID: String(found.animalID),
-            applicationDate: found.applicationDate ?? "",
-            status: found.status ?? "",
-            adoptedDate: found.adoptedDate ?? "",
-        });
+                // citation for formating date
+                // Date: 03/09/2026
+                // Adapted from:
+                // Source URL: https://www.w3schools.com/jsref/jsref_toisostring.asp
+                // Source URL: https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+                const formattedAppDate = found.applicationDate ? new Date(found.applicationDate).toISOString().slice(0, 16) : "";
+                const formattedAdoptDate = found.adoptedDate ? new Date(found.adoptedDate).toISOString().slice(0, 16) : "";
+
+                // Sets the form inputs with info found on the medical record
+                setForm({
+                    applicationID: String(found.applicationID),
+                    adopterID: String(found.adopterID),
+                    animalID: String(found.animalID),
+                    applicationDate: formattedAppDate,
+                    status: found.status,
+                    adoptedDate: formattedAdoptDate ?? "",
+                });
+            })
+            .catch(err => console.error("Error loading Medical Record", err))
+
+
     }, [id]);
 
     const onChange = (e) => {
@@ -113,9 +91,28 @@ const EditApplication = () => {
         setForm(prev => ({ ...prev, [name]: value }));
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        navigate("/applications");
+        try {
+            const response = await fetch(backendURL + "/applications/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+
+                body: JSON.stringify({
+                    applicationID: Number(id),
+                    adopterID: Number(form.adopterID),
+                    animalID: Number(form.animalID),
+                    applicationDate: form.applicationDate,
+                    status: form.status,
+                    adoptedDate: form.adoptedDate || null,
+                }),
+            });
+
+            navigate("/applications");
+        } catch (err) {
+            console.error("Medical Record Update failed", err);
+        }
+
     };
 
 

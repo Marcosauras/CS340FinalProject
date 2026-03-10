@@ -4,60 +4,67 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const EditAdopter = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
-  // Example of the expected SELECT results
-  const adopters = [
-    {
-      adopterID: 1,
-      name: "Ben",
-      phone: "832-123-8429",
-      email: "Ben@example.com",
-      note: "Looking for a small animal"
-    },
-    {
-      adopterID: 2,
-      name: "Lancelot",
-      phone: "804-832-2932",
-      email: "Lancelot@example.com",
-      note: null
-    },
-    {
-      adopterID: 3,
-      name: "Merlin",
-      phone: "804-832-7987",
-      email: "CourtMagician@example.com",
-      note: null
-    },
-  ];
-
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    note: "",
-  });
-
-  // Form will map out the results from the SELECT and prefill the results that are not NULL
-  useEffect(() => {
-    const adopterID = Number(id);
-    const found = adopters.find((a) => a.adopterID === adopterID);
-
-    setForm({
-      name: found.name ?? "",
-      phone: found.phone ?? "",
-      email: found.email ?? "",
-      note: found.note ?? "",
+      // Set the form to empty strings
+    const [form, setForm] = useState({
+        name: "",
+        phone: "",
+        breed: "",
+        email: "",
     });
-  }, [id]);
+
+  useEffect(() => {
+      fetch(backendURL + "/adopters")
+        .then(res => res.json())
+        .then(data => {
+          const adopterID = Number(id);
+          const found = data.find((a) => a.adopterID === adopterID);
+          // if the adopter is not found than console log an error
+          if (!found) {
+            console.error("Adopter not found");
+            return;
+          }
+          // set the form with the details from the adopters ID selected
+          setForm({
+            name: found.name ?? "",
+            phone: found.phone ?? "",
+            email: found.email ?? "",
+            note: found.note ?? "",
+          });
+        })
+        .catch(err => console.error("Error loading adopters:", err));
+  }, );
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    navigate("/adopters");
+
+    //send the updated values to the sql database
+    try {
+      const response = await fetch(backendURL + "/adopters/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        // set values that are allowed to be null to null if it is not found
+        body: JSON.stringify({
+          adopterID: Number(id),
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          note: form.note || null,
+        })
+      })
+
+      // Load the adopters page to show the updated database
+      navigate("/adopters");
+    } catch (err) {
+      // catch the error for any debugging needed
+      console.error("Adopter Update failed", err)
+    }
   };
 
 
