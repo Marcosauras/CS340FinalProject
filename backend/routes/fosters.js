@@ -72,9 +72,8 @@ router.post('/update', async (req, res) => {
 
 router.post('/delete', async (req, res) => {
   try {
-    const data = req.body;
-    const query = `CALL sp_DeleteFoster(?);`;
-    await db.query(query, [data.fosterID]);
+    await db.query('CALL sp_DeleteFoster(?);', [req.body.delete_foster_id]);
+
     res.status(200).json({ message: 'Foster record deleted successfully' });
   } catch (err) {
     console.error(err);

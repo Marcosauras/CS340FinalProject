@@ -22,16 +22,17 @@ const Animals = () => {
 
   // handles deleting the animal from the current row
   function handleDelete(animalID) {
-    const ok = window.confirm("Are you sure you want to delete this animal?");
+    const ok = window.confirm("Delete this animal?");
     if (!ok) return;
+
     fetch(`${backendURL}/animals/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteAnimalID: animalID })
+      body: JSON.stringify({ delete_animal_id: animalID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(backendURL + "/animals");
+        return fetch(`${backendURL}/animals`);
       })
       .then(res => res.json())
       .then(data => setAnimals(data))
