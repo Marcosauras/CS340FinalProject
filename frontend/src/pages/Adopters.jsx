@@ -22,9 +22,22 @@ const Adopters = () => {
   }
 
   // this will delete the adopter from the current row
-  function handleDelete() {
-    const ok = window.confirm("Later this will delete the Adopter in this row");
+  function handleDelete(adopterDeleteID) {
+    const ok = window.confirm("Are you sure you want to delete this adopter?");
     if (!ok) return;
+
+    fetch(backendURL + "/adopters/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adopterID: adopterDeleteID })
+    })
+      .then(() => {
+        // reloads the page to show updated database
+        return fetch(backendURL + "/adopters");
+      })
+      .then(res => res.json())
+      .then(data => setAdopters(data))
+      .catch(err => console.error("Delete failed:", err));
   }
   return (
     <div>

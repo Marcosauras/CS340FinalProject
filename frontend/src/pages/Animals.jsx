@@ -9,7 +9,7 @@ const Animals = () => {
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(`${backendURL}/animals`)
+    fetch(backendURL + "/animals")
       .then(res => res.json())
       .then(data => setAnimals(data))
       .catch(err => console.error("Error fetching animals:", err));
@@ -21,24 +21,22 @@ const Animals = () => {
   }
   
   // handles deleting the animal from the current row
-  function handleDelete(animalID) {
-    const ok = window.confirm("Delete this animal?");
+  function handleDelete(animalDeleteID) {
+    const ok = window.confirm("Are you sure you want to delete this animal?");
     if (!ok) return;
-
-    fetch(`${backendURL}/animals/delete`, {
+    fetch(backendURL + "/animals/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ delete_animal_id: animalID })
+      body: JSON.stringify({ animalId: animalDeleteID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/animals`);
+        return fetch(backendURL + "/animals");
       })
       .then(res => res.json())
       .then(data => setAnimals(data))
       .catch(err => console.error("Delete failed:", err));
   }
-  console.log(animals)
   return (
     <div>
       <h3>Animals</h3>

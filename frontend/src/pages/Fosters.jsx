@@ -21,9 +21,22 @@ const Fosters = () => {
   }
 
   // Will delete the values in the current row
-  function handleDelete() {
-    const ok = window.confirm("Later this will delete the Foster in this row");
+  function handleDelete(fosterDeleteId) {
+    const ok = window.confirm("Are you sure you want to delete this Foster?");
     if (!ok) return;
+
+    fetch(backendURL + "/fosters/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fosterID: fosterDeleteId })
+    })
+      .then(() => {
+        // reloads the page to show updated database
+        return fetch(backendURL + "/fosters");
+      })
+      .then(res => res.json())
+      .then(data => setFosters(data))
+      .catch(err => console.error("Delete failed:", err));
   }
 
   return (
