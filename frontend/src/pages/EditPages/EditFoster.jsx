@@ -4,32 +4,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const EditFoster = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
-    // Example of the expected result from the SELECT query
-    const fosters = [
-        {
-            fosterID: 1,
-            name: "Joey",
-            phone: "804-832-2424",
-            email: "JoeyFosters@example.com",
-            capacity: 1
-        },
-        {
-            fosterID: 2,
-            name: "Lannie",
-            phone: "621-321-1256",
-            email: "NotACat@example.come",
-            capacity: 4
-        },
-        {
-            fosterID: 3,
-            name: "Donna",
-            phone: "292-291-2033",
-            email: "Donna@example.com",
-            capacity: 2
-        },
-    ];
-
+    // Set the form to empty strings
     const [form, setForm] = useState({
         name: "",
         phone: "",
@@ -37,25 +14,26 @@ const EditFoster = () => {
         capacity: "",
     });
 
-    const [error, setError] = useState("");
-    
     useEffect(() => {
-        const fosterID = Number(id);
-        // Confirms that the foster is the correct one
-        const found = fosters.find(f => f.fosterID === fosterID);
-
-        if (!found) {
-            setError(`No foster found with ID ${id}`);
-            return;
-        }
-        
-        // Auto fills the form from inputted info
-        setForm({
-            name: found.name ?? "",
-            phone: found.phone ?? "",
-            email: found.email ?? "",
-            capacity: String(found.capacity ?? ""),
-        });
+        fetch(backendURL + "/fosters")
+        .then(res => res.json())
+        .then(data => {
+            const fosterID = Number(id);
+            // Confirms that the foster is the correct one
+            const found = data.find(f => f.fosterID === fosterID);
+            if (!found) {
+                console.error("Animal not found");
+                return;
+            }
+            // sets the form inputs with info found on the animal or leaves it empty if nothing is found
+            setForm({
+                name: found.name ?? "",
+                phone: found.phone ?? "",
+                email: found.email ?? "",
+                capacity: String(found.capacity ?? ""),
+            });
+        })
+        .catch(err => console.error("Error loading Fosters"))
     }, [id]);
 
     const onChange = (e) => {
@@ -63,9 +41,26 @@ const EditFoster = () => {
         setForm(prev => ({ ...prev, [name]: value }));
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        navigate("/fosters");
+        try {
+            const response = await fetch(backendURL + "/fosters/update", {
+                method: "POST",
+                header: {"Content-Type": "aaplication/json"},
+                body: JSON.stringify({
+                    fosterID: Number(id),
+                    name: form.name,
+                    phone: form.phone,
+                    email: form.email,
+                    capacity: form.capacity,
+                }),
+            });
+
+            // Load the fosters page to show the updated database
+            navigate("/fosters");
+        } catch (err) {
+            console.error("Foster Update failed", err)
+        }
     };
 
     return (

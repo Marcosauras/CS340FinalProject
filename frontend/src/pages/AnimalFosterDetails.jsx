@@ -17,8 +17,8 @@ const AnimalFosterDetails = () => {
 
 
   // This will send the user to the edit page
-  function handleEdit(animalID, fosterID) {
-    navigate(`/animals-fosters/edit/${animalID}/${fosterID}`);
+  function handleEdit(animalFosterDetailID) {
+    navigate(`/animals-fosters/edit/${animalFosterDetailID}`);
   }
 
   // this will delete the AnimalFoster Data from the current row
@@ -50,7 +50,7 @@ const AnimalFosterDetails = () => {
           {animalFosters.map((animalFost) => (
             <tr key={
               animalFost.animalFosterDetailID ??
-              `${animalFost.animalID}-${animalFost.fosterID}-${animalFost.startDate}`
+              `${animalFosterDetailID}`
             }>
               <td>{animalFost.animalName}: {animalFost.animalID}</td>
               <td>{animalFost.fosterName}: {animalFost.fosterID}</td>

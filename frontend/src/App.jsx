@@ -71,7 +71,7 @@ function App() {
           <Route path="/adopters/edit/:id" element={<EditAdopter />} />
           <Route path="/medical-records/edit/:id" element={<EditMedicalRecord />} />
           <Route path="/applications/edit/:id" element={<EditApplication />} />
-          <Route path="/animals-fosters/edit/:animalID/:fosterID" element={<EditAnimalFosterDetail />} />
+          <Route path="/animals-fosters/edit/:id/" element={<EditAnimalFosterDetail />} />
         </Routes>
       </main>
 
