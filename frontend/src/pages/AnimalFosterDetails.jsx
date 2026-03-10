@@ -22,9 +22,22 @@ const AnimalFosterDetails = () => {
   }
 
   // this will delete the AnimalFoster Data from the current row
-  function handleDelete() {
-    const ok = window.confirm("Later this will delete the AnimalFoster Data in this row");
+  function handleDelete(animalFosterDetailID) {
+    const ok = window.confirm("Are you sure you want to delete this Foster?");
     if (!ok) return;
+
+    fetch(backendURL + "/animalFosterDetails/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ animalFosterDetailID: animalFosterDetailID })
+    })
+      .then(() => {
+        // reloads the page to show updated database
+        return fetch(backendURL + "/animalFosterDetails");
+      })
+      .then(res => res.json())
+      .then(data => setAnimalFosters(data))
+      .catch(err => console.error("Delete failed:", err));
   }
 
   return (
@@ -57,8 +70,8 @@ const AnimalFosterDetails = () => {
               <td>{animalFost.startDate}</td>
               <td>{animalFost.endDate ?? "NULL"}</td>
               <td>
-                <button onClick={() => handleEdit(animalFost.animalID, animalFost.fosterID)}>Edit</button>{" "}
-                <button onClick={() => handleDelete()}>Delete</button>
+                <button onClick={() => handleEdit(animalFost.animalFosterDetailID)}>Edit</button>{" "}
+                <button onClick={() => handleDelete(animalFost.animalFosterDetailID)}>Delete</button>
               </td>
             </tr>
           ))}

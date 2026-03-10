@@ -72,7 +72,7 @@ const EditAnimalFosterDetail = () => {
                 setForm({
                     animalID: String(found.animalID),
                     fosterID: String(found.fosterID),
-                    startDate: formattedStartDate ?? "",
+                    startDate: formattedStartDate,
                     endDate: formattedEndDate ?? "",
                 });
             })
@@ -97,8 +97,8 @@ const EditAnimalFosterDetail = () => {
                     animalFosterDetailID: Number(id),
                     animalID: Number(form.animalID),
                     fosterID: Number(form.fosterID),
-                    startDate: form.startDate | NULL,
-                    endDate: form.startDate | NULL,
+                    startDate: form.startDate,
+                    endDate: form.startDate,
                 }),
             });
 

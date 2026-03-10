@@ -21,10 +21,24 @@ const Applications = () => {
   }
 
   // this will delete the AnimalFoster Data from the current row
-  function handleDelete() {
-    const ok = window.confirm("Later this will delete the Application Data in this row");
+  function handleDelete(applicationID) {
+    const ok = window.confirm("Are you sure you want to delete this Application?");
     if (!ok) return;
+
+    fetch(backendURL + "/applications/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deleteApplicationID: applicationID })
+    })
+      .then(() => {
+        // reloads the page to show updated database\
+        return fetch(backendURL + "/applications");
+      })
+      .then(res => res.json())
+      .then(data => setApplications(data))
+      .catch(err => console.error("Delete failed:", err));
   }
+
   return (
     <div>
       <h3>Applications</h3>
@@ -57,7 +71,7 @@ const Applications = () => {
               <td>{application.adoptedDate ?? "NULL"}</td>
               <td>
                 <button onClick={() => handleEdit(application.applicationID)}>Edit</button>{" "}
-                <button onClick={() => handleDelete()}>Delete</button>
+                <button onClick={() => handleDelete(application.applicationID)}>Delete</button>
               </td>
             </tr>
           ))}

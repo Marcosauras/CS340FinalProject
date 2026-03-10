@@ -98,10 +98,12 @@ router.post('/update', async (req, res) => {
 // Deletes an animal based on ID
 router.post('/delete', async (req, res) => {
   try {
-    await db.query('CALL sp_DeleteAnimal(?);', [req.body.delete_animal_id]);
+    const data = req.body;
+    await db.query('CALL sp_DeleteAnimal(?);', [data.AnimalId]);
 
     res.status(200).json({ message: 'Deleted successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).send('Database error');
   }
 });
