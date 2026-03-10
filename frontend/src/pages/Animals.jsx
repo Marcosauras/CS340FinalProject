@@ -19,15 +19,15 @@ const Animals = () => {
   function handleEdit(animalID) {
     navigate(`/animals/edit/${animalID}`);
   }
-  
+
   // handles deleting the animal from the current row
-  function handleDelete(animalDeleteID) {
+  function handleDelete(animalID) {
     const ok = window.confirm("Are you sure you want to delete this animal?");
     if (!ok) return;
-    fetch(backendURL + "/animals/delete", {
+    fetch(`${backendURL}/animals/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ animalId: animalDeleteID })
+      body: JSON.stringify({ deleteAnimalID: animalID })
     })
       .then(() => {
         // reloads the page to show updated database

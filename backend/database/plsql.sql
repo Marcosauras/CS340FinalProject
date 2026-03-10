@@ -3,9 +3,6 @@
 -- Adapted from:
 -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
-
-
-/* ANIMALS */
 -- Gets all animals
 DROP PROCEDURE IF EXISTS sp_GetAnimals;
 DELIMITER //
@@ -108,8 +105,6 @@ END //
 DELIMITER ;
 
 
-/* FOSTERS */
-
 -- Gets all fosters 
 DROP PROCEDURE IF EXISTS sp_GetFosters;
 DELIMITER //
@@ -131,8 +126,8 @@ DELIMITER ;
 
 -- Creates a foster (a foster parent)
 DROP PROCEDURE IF EXISTS sp_CreateFoster;
-DELIMITER //
 
+DELIMITER //
 CREATE PROCEDURE sp_CreateFoster(
     IN p_name       VARCHAR(255),
     IN p_phone      VARCHAR(20),
@@ -147,7 +142,6 @@ BEGIN
     SELECT LAST_INSERT_ID() INTO p_id;
     SELECT LAST_INSERT_ID() AS 'new_id';
 END //
-
 DELIMITER ;
 
 -- Updates an foster
@@ -208,61 +202,7 @@ END //
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS sp_UpdateFoster;
-DELIMITER //
-
-CREATE PROCEDURE sp_UpdateFoster(
-    IN p_fosterID   INT(11),
-    IN p_name       VARCHAR(255),
-    IN p_phone      VARCHAR(20),
-    IN p_email      VARCHAR(255),
-    IN p_capacity   INT(11)
-)
-BEGIN
-    UPDATE Fosters
-    SET
-        name = p_name,
-        phone = p_phone,
-        email = p_email,
-        capacity = p_capacity
-    WHERE fosterID = p_fosterID;
-END //
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_DeleteFoster;
-DELIMITER //
-
-CREATE PROCEDURE sp_DeleteFoster(
-    IN p_fosterID INT
-)
-BEGIN
-    DECLARE error_message VARCHAR(255);
-
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
-        DELETE FROM Fosters
-        WHERE fosterID = p_fosterID;
-
-        IF ROW_COUNT() = 0 THEN
-            SET error_message = CONCAT('No matching record found in Fosters for id: ', p_fosterID);
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
-        END IF;
-
-    COMMIT;
-END //
-
-DELIMITER ;
-
-/* ADOPTERS */
 -- Grabs all the Adopters
-
-/* ADOPTERS */
 
 DROP PROCEDURE IF EXISTS sp_GetAdopters;
 DELIMITER //
@@ -284,8 +224,8 @@ DELIMITER ;
 
 -- Creates an adopter
 DROP PROCEDURE IF EXISTS sp_CreateAdopter;
-DELIMITER //
 
+DELIMITER //
 CREATE PROCEDURE sp_CreateAdopter(
     IN p_name       VARCHAR(255),
     IN p_phone      VARCHAR(20),
@@ -298,61 +238,8 @@ BEGIN
     VALUES (p_name, p_phone, p_email, p_note);
 
     SELECT LAST_INSERT_ID() INTO p_id;
-    SELECT LAST_INSERT_ID() AS new_id;
+    SELECT LAST_INSERT_ID() AS 'new_id';
 END //
-
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_UpdateAdopter;
-DELIMITER //
-
-CREATE PROCEDURE sp_UpdateAdopter(
-    IN p_adopterID  INT(11),
-    IN p_name       VARCHAR(255),
-    IN p_phone      VARCHAR(20),
-    IN p_email      VARCHAR(255),
-    IN p_note       TEXT
-)
-BEGIN
-    UPDATE Adopters
-    SET
-        name = p_name,
-        phone = p_phone,
-        email = p_email,
-        note = p_note
-    WHERE adopterID = p_adopterID;
-END //
-
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_DeleteAdopter;
-DELIMITER //
-
-CREATE PROCEDURE sp_DeleteAdopter(
-    IN p_adopterID INT
-)
-BEGIN
-    DECLARE error_message VARCHAR(255);
-
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
-        DELETE FROM Adopters
-        WHERE adopterID = p_adopterID;
-
-        IF ROW_COUNT() = 0 THEN
-            SET error_message = CONCAT('No matching record found in Adopters for id: ', p_adopterID);
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
-        END IF;
-
-    COMMIT;
-END //
-
 DELIMITER ;
 
 -- Updates an adopter
@@ -448,62 +335,8 @@ BEGIN
     VALUES (p_animalID, p_appointmentDate, p_note);
 
     SELECT LAST_INSERT_ID() INTO p_id;
-    SELECT LAST_INSERT_ID() AS new_id;
+    SELECT LAST_INSERT_ID() AS 'new_id';
 END //
-
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_UpdateMedicalRecord;
-DELIMITER //
-
-CREATE PROCEDURE sp_UpdateMedicalRecord(
-    IN p_medicalRecordID    INT(11),
-    IN p_animalID           INT(11),
-    IN p_appointmentDate    DATETIME,
-    IN p_note               TEXT,
-    OUT p_id                INT(11)
-)
-BEGIN
-    UPDATE MedicalRecords
-    SET
-        animalID = p_animalID,
-        appointmentDate = p_appointmentDate,
-        note = p_note
-    WHERE medicalRecordID = p_medicalRecordID;
-
-    SET p_id = p_medicalRecordID;
-END //
-
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_DeleteMedicalRecord;
-DELIMITER //
-
-CREATE PROCEDURE sp_DeleteMedicalRecord(
-    IN p_recordID INT
-)
-BEGIN
-    DECLARE error_message VARCHAR(255);
-
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
-        DELETE FROM MedicalRecords
-        WHERE medicalRecordID = p_recordID;
-
-        IF ROW_COUNT() = 0 THEN
-            SET error_message = CONCAT('No matching record found in MedicalRecords for id: ', p_recordID);
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
-        END IF;
-
-    COMMIT;
-END //
-
 DELIMITER ;
 
 
@@ -587,6 +420,8 @@ END //
 
 DELIMITER ;
 
+
+-- Creates an application
 DROP PROCEDURE IF EXISTS sp_CreateApplication;
 
 DELIMITER //
@@ -609,9 +444,6 @@ DELIMITER ;
 -- Updates an application
 DROP PROCEDURE IF EXISTS sp_UpdateApplication;
 
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_DeleteApplication;
 DELIMITER //
 CREATE PROCEDURE sp_UpdateApplication(
     IN p_applicationID      INT(11),
@@ -672,9 +504,6 @@ DELIMITER ;
 -- Grab all the animal Foster Details
 DROP PROCEDURE IF EXISTS sp_GetAnimalFosterDetails;
 
-/* ANIMAL FOSTER DETAILS */
-
-DROP PROCEDURE IF EXISTS sp_GetAnimalFosterDetails;
 DELIMITER //
 
 CREATE PROCEDURE sp_GetAnimalFosterDetails()
@@ -697,15 +526,16 @@ END //
 
 DELIMITER ;
 
+-- Creates an animal foster entry with details on who the animal is staying with and for how long
 DROP PROCEDURE IF EXISTS sp_CreateAnimalFosterDetail;
-DELIMITER //
 
+DELIMITER //
 CREATE PROCEDURE sp_CreateAnimalFosterDetail(
-    IN p_animalID      INT(11),
-    IN p_fosterID      INT(11),
-    IN p_startDate     DATETIME,
-    IN p_endDate       DATETIME,
-    OUT p_id           INT(11)
+    IN p_animalID   INT,
+    IN p_fosterID   INT,
+    IN p_startDate  DATETIME,
+    IN p_endDate    DATETIME,
+    OUT p_id        INT
 )
 BEGIN
     INSERT INTO AnimalFosterDetails (animalID, fosterID, startDate, endDate)
@@ -714,29 +544,6 @@ BEGIN
     SELECT LAST_INSERT_ID() INTO p_id;
     SELECT LAST_INSERT_ID() AS new_id;
 END //
-
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS sp_UpdateAnimalFosterDetail;
-DELIMITER //
-
-CREATE PROCEDURE sp_UpdateAnimalFosterDetail(
-    IN p_animalFosterDetailID   INT(11),
-    IN p_animalID               INT(11),
-    IN p_fosterID               INT(11),
-    IN p_startDate              DATETIME,
-    IN p_endDate                DATETIME
-)
-BEGIN
-    UPDATE AnimalFosterDetails
-    SET
-        animalID = p_animalID,
-        fosterID = p_fosterID,
-        startDate = p_startDate,
-        endDate = p_endDate
-    WHERE animalFosterDetailID = p_animalFosterDetailID;
-END //
-
 DELIMITER ;
 
 

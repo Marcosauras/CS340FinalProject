@@ -8,6 +8,7 @@ const db = require('../database/db-connector');
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
 // Get all Animal Foster Records in the database
+
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query('CALL sp_GetAnimalFosterDetails();');

@@ -8,6 +8,10 @@ const db = require('../database/db-connector');
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
 // Get all applications in the database
+router.get('/test', (req, res) => {
+  res.send('applications delete route file is loading');
+});
+
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query('CALL sp_GetApplications();');
@@ -71,11 +75,12 @@ router.post('/update', async (req, res) => {
     res.status(500).send('Database error');
   }
 });
+
 router.post('/delete', async (req, res) => {
   try {
     const data = req.body;
     const query = `CALL sp_DeleteApplication(?);`;
-    await db.query(query, [data.applicationID]);
+    await db.query(query, [data.deleteApplicationID]);
     res.status(200).json({ message: 'Application deleted successfully' });
   } catch (err) {
     console.error(err);
