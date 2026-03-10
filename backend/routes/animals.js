@@ -56,22 +56,22 @@ router.post('/create', async (req, res) => {
 });
 
 // Update the animal
-router.post("/update", async (req, res) => {
+router.post('/update', async (req, res) => {
   try {
     const data = req.body;
 
     const animalID = Number(data.animalID);
     if (Number.isNaN(animalID)) {
-      return res.status(400).json({ message: "Invalid animal ID" });
+      return res.status(400).json({ message: 'Invalid animal ID' });
     }
 
     const age =
-      data.age === "" || data.age === null || data.age === undefined
+      data.age === '' || data.age === null || data.age === undefined
         ? null
         : parseInt(data.age, 10);
 
     if (age !== null && Number.isNaN(age)) {
-      return res.status(400).json({ message: "Invalid age" });
+      return res.status(400).json({ message: 'Invalid age' });
     }
 
     const query = 'CALL sp_UpdateAnimal(?, ?, ?, ?, ?, ?);';
@@ -84,15 +84,15 @@ router.post("/update", async (req, res) => {
       age,
     ]);
 
-    return res.status(200).json({ message: "Animal updated successfully" });
-  }  catch (error) {
-  console.error("Error executing update:", error);
-  return res.status(500).json({
-    message: "Database error",
-    error: error.message,
-    code: error.code
-  });
-}
+    return res.status(200).json({ message: 'Animal updated successfully' });
+  } catch (error) {
+    console.error('Error executing update:', error);
+    return res.status(500).json({
+      message: 'Database error',
+      error: error.message,
+      code: error.code,
+    });
+  }
 });
 
 // Deletes an animal based on ID
