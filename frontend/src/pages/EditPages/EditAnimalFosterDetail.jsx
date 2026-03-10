@@ -2,71 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const EditAnimalFosterDetail = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const { animalID, fosterID } = useParams();
+    const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
-    // Example of the SELECT results
-    const animalFosterDetails = [
-        {
-            animalID: 1,
-            fosterID: 1,
-            startDate: "2026-01-10 10:30:00",
-            endDate: "2026-01-20 10:30:00"
-        },
-        {
-            animalID: 1,
-            fosterID: 2,
-            startDate: "2026-02-04 10:30:00",
-            endDate: null
-        },
-        {
-            animalID: 2,
-            fosterID: 2,
-            startDate: "2026-01-01 10:30:00",
-            endDate: null
-        },
-    ];
-
-    // SELECT of * Animal IDS and names
-    const allAnimals = [
-        {
-            animalID: 1,
-            name: "Roman",
-        },
-
-        {
-            animalID: 2,
-            name: "Calliope",
-        },
-
-        {
-            animalID: 3,
-            name: "Arthur Pendragon",
-        },
-
-        {
-            animalID: 4,
-            name: "Bella",
-        }
-    ];
-
-    // SELECT of * Foster IDS and names
-    const allFosters = [
-        {
-            fosterID: 1,
-            name: "Joey",
-        },
-        {
-            fosterID: 2,
-            name: "Lannie",
-        },
-        {
-            fosterID: 3,
-            name: "Donna",
-        }
-    ];
-
-    const [original, setOriginal] = useState({ animalID: "", fosterID: "" });
+    const [allAnimals, setAllAnimals] = useState([])
+    const [allFosters, setAllAdopters] = useState([])
 
     const [form, setForm] = useState({
         animalID: "",
@@ -75,32 +16,98 @@ const EditAnimalFosterDetail = () => {
         endDate: "",
     });
 
+    // Gets the animal data from the database to fill the dropdown
     useEffect(() => {
-        const aniID = Number(animalID);
-        const fosID = Number(fosterID);
+        fetch(backendURL + "/animals")
+            .then(res => res.json())
+            .then(data => {
+                // if no animals are found return an error
+                if (!data) {
+                    console.error("No Animals found");
+                    return;
+                }
+                // set animals to hook to use in form
+                setAllAnimals(data)
+            })
+            .catch(err => console.error("Error loading animal:", err));
+    }, []);
 
-        const found = animalFosterDetails.find(
-            (row) => row.animalID === aniID && row.fosterID === fosID
-        );
+    // Gets the animal data from the database to fill the dropdown
+    useEffect(() => {
+        fetch(backendURL + "/fosters")
+            .then(res => res.json())
+            .then(data => {
+                // if no animals are found return an error
+                if (!data) {
+                    console.error("No Adopters found");
+                    return;
+                }
 
-        setOriginal({ animalID: String(found.animalID), fosterID: String(found.fosterID) });
+                // set animals to hook to use in form
+                setAllAdopters(data)
+            })
+            .catch(err => console.error("Error loading animal:", err));
+    }, []);
+
+    useEffect(() => {
+        fetch(backendURL + "/animalFosterDetails")
+            .then(res => res.json())
+            .then(data => {
+                const animalFosterDetailID = Number(id);
+                const found = data.find((a) => a.animalFosterDetailID === animalFosterDetailID);
+
+                if (!found) {
+                    console.error("Animal Foster Details not found")
+                }
+
+                // citation for formating date
+                // Date: 03/09/2026
+                // Adapted from:
+                // Source URL: https://www.w3schools.com/jsref/jsref_toisostring.asp
+                // Source URL: https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+                const formattedStartDate = found.startDate ? new Date(found.startDate).toISOString().slice(0, 16) : "";
+                const formattedEndDate = found.endDate ? new Date(found.endDate).toISOString().slice(0, 16) : "";
+
+                // Sets the form inputs with info found on the medical record
+                setForm({
+                    animalID: String(found.animalID),
+                    fosterID: String(found.fosterID),
+                    startDate: formattedStartDate ?? "",
+                    endDate: formattedEndDate ?? "",
+                });
+            })
         // Auto fills the Form with the info from the table row the Edit was clicked on
-        setForm({
-            animalID: String(found.animalID),
-            fosterID: String(found.fosterID),
-            startDate: found.startDate ?? "",
-            endDate: found.endDate ?? "",
-        });
-    }, [animalID, fosterID]);
+
+    }, []);
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        navigate("/animals-fosters");
+
+        try {
+            const response = await fetch(backendURL + "/applications/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+
+                body: JSON.stringify({
+                    animalFosterDetailID: Number(id),
+                    animalID: Number(form.animalID),
+                    fosterID: Number(form.fosterID),
+                    startDate: form.startDate | NULL,
+                    endDate: form.startDate | NULL,
+                }),
+            });
+
+            navigate("/animals-fosters");
+        } catch (err) {
+            console.error("Animal Foster Details Update failed", err);
+        }
+
+        
     };
 
     return (
