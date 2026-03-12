@@ -54,8 +54,9 @@ router.post('/create', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
+    console.log("Hello there")
     const data = req.body;
-    const query = `CALL sp_UpdateMedicalRecord(?, ?, ?, ?, @updated_id);`;
+    const query = `CALL sp_UpdateMedicalRecord(?, ?, ?, ?);`;
     await db.query(query, [
       data.medicalRecordID,
       data.animalID,

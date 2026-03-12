@@ -13,7 +13,7 @@ const EditMedicalRecord = () => {
     note: "",
   });
 
-  
+
   // Gets the animal data from the database to fill the dropdown
   useEffect(() => {
     fetch(backendURL + "/animals")
@@ -41,13 +41,13 @@ const EditMedicalRecord = () => {
           console.error("Medical Record not found");
           return;
         }
-        
+
         // citation for formating date
         // Date: 03/09/2026
         // Adapted from:
         // Source URL: https://www.w3schools.com/jsref/jsref_toisostring.asp
         // Source URL: https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
-        const formattedDate = found.appointmentDate ? new Date(found.appointmentDate).toISOString().slice(0, 16): "";
+        const formattedDate = found.appointmentDate ? new Date(found.appointmentDate).toISOString().slice(0, 16) : "";
 
         // Sets the form inputs with info found on the medical record
         setForm({
@@ -71,8 +71,7 @@ const EditMedicalRecord = () => {
     try {
       const response = await fetch(backendURL + "/medicalRecords/update", {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           medicalRecordID: Number(id),
           animalID: Number(form.animalID),
@@ -80,13 +79,17 @@ const EditMedicalRecord = () => {
           note: form.note || null,
         }),
       });
-
+      // if the response from doesn't go well return an error
+      if (!response.ok) {
+        console.error("Server error:");
+        return;
+      }
       navigate("/medical-records");
     } catch (err) {
       console.error("Medical Record Update failed", err);
     }
 
-    
+
   };
 
 

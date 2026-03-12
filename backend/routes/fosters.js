@@ -6,7 +6,7 @@ const db = require('../database/db-connector');
 // -- 3/02/2022
 // -- Adapted from:
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
-
+console.log("fosters router loaded");
 // Get all fosters in the database
 router.get('/', async (req, res) => {
   try {
@@ -38,6 +38,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// sends a request to the database to run the Procedure sp_CreateFoster
 router.post('/create', async (req, res) => {
   try {
     const data = req.body;
@@ -53,6 +54,7 @@ router.post('/create', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
+    console.log("update route hit");
     const data = req.body;
     const query = `CALL sp_UpdateFoster(?, ?, ?, ?, ?);`;
     await db.query(query, [
@@ -72,7 +74,7 @@ router.post('/update', async (req, res) => {
 
 router.post('/delete', async (req, res) => {
   try {
-    await db.query('CALL sp_DeleteFoster(?);', [req.body.delete_foster_id]);
+    await db.query('CALL sp_DeleteFoster(?);', [req.body.deleteFosterId]);
 
     res.status(200).json({ message: 'Foster record deleted successfully' });
   } catch (err) {

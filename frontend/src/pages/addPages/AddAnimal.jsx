@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const AddAnimal = () => {
   const navigate = useNavigate();
-  const backendURL = "http://classwork.engr.oregonstate.edu:63035";
-  const [formData, setForm] = useState({
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+  const [form, setForm] = useState({
     name: '',
     species: '',
     breed: '',
@@ -14,7 +14,7 @@ const AddAnimal = () => {
 
   function handleChange(e) {
     setForm({
-      ...formData,
+      ...form,
       [e.target.name]: e.target.value,
     });
   }
@@ -30,10 +30,10 @@ const AddAnimal = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(form),
       }
     );
-
+    // if the update went through send the user to the animals page
       if (response.ok) {
         navigate('/animals');
       }
@@ -50,7 +50,7 @@ const AddAnimal = () => {
         <p>
           <label>
             Name:
-            <input name="name" value={formData.name} onChange={handleChange} />
+            <input name="name" value={form.name} onChange={handleChange} />
           </label>
         </p>
 
@@ -59,7 +59,7 @@ const AddAnimal = () => {
             Species:
             <input
               name="species"
-              value={formData.species}
+              value={form.species}
               onChange={handleChange}
             />
           </label>
@@ -70,7 +70,7 @@ const AddAnimal = () => {
             Breed:
             <input
               name="breed"
-              value={formData.breed}
+              value={form.breed}
               onChange={handleChange}
             />
           </label>
@@ -78,7 +78,7 @@ const AddAnimal = () => {
         <p>
           <label>
             Sex:
-            <input name="sex" value={formData.sex} onChange={handleChange} />
+            <input name="sex" value={form.sex} onChange={handleChange} />
           </label>
         </p>
         <p>
@@ -87,7 +87,7 @@ const AddAnimal = () => {
             <input
               name="age"
               type="number"
-              value={formData.age}
+              value={form.age}
               onChange={handleChange}
             />
           </label>

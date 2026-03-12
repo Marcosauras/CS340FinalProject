@@ -16,24 +16,24 @@ const EditFoster = () => {
 
     useEffect(() => {
         fetch(backendURL + "/fosters")
-        .then(res => res.json())
-        .then(data => {
-            const fosterID = Number(id);
-            // Confirms that the foster is the correct one
-            const found = data.find(f => f.fosterID === fosterID);
-            if (!found) {
-                console.error("Animal not found");
-                return;
-            }
-            // sets the form inputs with info found on the animal or leaves it empty if nothing is found
-            setForm({
-                name: found.name ?? "",
-                phone: found.phone ?? "",
-                email: found.email ?? "",
-                capacity: String(found.capacity ?? ""),
-            });
-        })
-        .catch(err => console.error("Error loading Fosters"))
+            .then(res => res.json())
+            .then(data => {
+                const fosterID = Number(id);
+                // Confirms that the foster is the correct one
+                const found = data.find(f => f.fosterID === fosterID);
+                if (!found) {
+                    console.error("Animal not found");
+                    return;
+                }
+                // sets the form inputs with info found on the animal or leaves it empty if nothing is found
+                setForm({
+                    name: found.name ?? "",
+                    phone: found.phone ?? "",
+                    email: found.email ?? "",
+                    capacity: String(found.capacity ?? ""),
+                });
+            })
+            .catch(err => console.error("Error loading Fosters"))
     }, [id]);
 
     const onChange = (e) => {
@@ -44,9 +44,10 @@ const EditFoster = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
+            // attempts request to the server to update the foster
             const response = await fetch(backendURL + "/fosters/update", {
                 method: "POST",
-                header: {"Content-Type": "aaplication/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     fosterID: Number(id),
                     name: form.name,
@@ -55,14 +56,18 @@ const EditFoster = () => {
                     capacity: form.capacity,
                 }),
             });
-
+            // if the response from doesn't go well return an error
+            if (!response.ok) {
+                console.error("Server error:");
+                return;
+            }
             // Load the fosters page to show the updated database
             navigate("/fosters");
         } catch (err) {
             console.error("Foster Update failed", err)
         }
     };
-
+    // form to put the updated foster info into
     return (
         <div>
             <h2>Edit Foster</h2>

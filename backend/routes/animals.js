@@ -55,7 +55,7 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// Update the animal
+// Update an animal
 router.post('/update', async (req, res) => {
   try {
     const data = req.body;
@@ -98,7 +98,8 @@ router.post('/update', async (req, res) => {
 // Deletes an animal based on ID
 router.post('/delete', async (req, res) => {
   try {
-    await db.query('CALL sp_DeleteAnimal(?);', [req.body.delete_animal_id]);
+    
+    await db.query('CALL sp_DeleteAnimal(?);', [req.body.deleteAnimalId]);
 
     res.status(200).json({ message: 'Deleted successfully' });
   } catch (error) {
