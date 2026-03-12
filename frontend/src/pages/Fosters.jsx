@@ -25,14 +25,14 @@ const Fosters = () => {
     const ok = window.confirm("Are you sure you want to delete this foster?");
     if (!ok) return;
 
-    fetch(`${backendURL}/fosters/delete`, {
+    fetch(backendURL + "/fosters/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deleteFosterId: fosterId })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/fosters`);
+        return fetch(backendURL + "/fosters");
       })
       .then(res => res.json())
       .then(data => setFosters(data))

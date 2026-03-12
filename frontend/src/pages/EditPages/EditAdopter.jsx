@@ -6,39 +6,39 @@ const EditAdopter = () => {
   const navigate = useNavigate();
   const backendURL = "http://classwork.engr.oregonstate.edu:63033";
 
-      // Set the form to empty strings
-    const [form, setForm] = useState({
-        name: "",
-        phone: "",
-        breed: "",
-        email: "",
-    });
+  // Set the form to empty strings
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    note: "",
+  });
 
   useEffect(() => {
-      fetch(backendURL + "/adopters")
-        .then(res => res.json())
-        .then(data => {
-          const adopterID = Number(id);
-          const found = data.find((a) => a.adopterID === adopterID);
-          // if the adopter is not found than console log an error
-          if (!found) {
-            console.error("Adopter not found");
-            return;
-          }
-          // set the form with the details from the adopters ID selected
-          setForm({
-            name: found.name ?? "",
-            phone: found.phone ?? "",
-            email: found.email ?? "",
-            note: found.note ?? "",
-          });
-        })
-        .catch(err => console.error("Error loading adopters:", err));
-  }, );
+    fetch(backendURL + "/adopters")
+      .then(res => res.json())
+      .then(data => {
+        const adopterID = Number(id);
+        const found = data.find((a) => a.adopterID === adopterID);
+        // if the adopter is not found than console log an error
+        if (!found) {
+          console.error("Adopter not found");
+          return;
+        }
+        // set the form with the details from the adopters ID selected
+        setForm({
+          name: found.name ?? "",
+          phone: found.phone ?? "",
+          email: found.email ?? "",
+          note: found.note ?? "",
+        });
+      })
+      .catch(err => console.error("Error loading adopters:", err));
+  }, [id]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const onSubmit = async (e) => {
@@ -48,7 +48,7 @@ const EditAdopter = () => {
     try {
       const response = await fetch(backendURL + "/adopters/update", {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         // set values that are allowed to be null to null if it is not found
         body: JSON.stringify({
           adopterID: Number(id),
@@ -67,7 +67,7 @@ const EditAdopter = () => {
     }
   };
 
-
+  // form to put the updated adopter info into
   return (
     <div>
       <h2>Edit Adopter</h2>
@@ -119,7 +119,7 @@ const EditAdopter = () => {
               name="note"
               value={form.note}
               onChange={onChange}
-              placeholder="(Optional)"
+              placeholder="add notes about the Adopter here"
             />
           </label>
         </div>

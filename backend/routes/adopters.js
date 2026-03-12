@@ -39,6 +39,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Database error');
   }
 });
+
 // Create a new Adopter
 router.post('/create', async (req, res) => {
   try {
@@ -76,6 +77,7 @@ router.post('/update', async (req, res) => {
 // Delete the Adopter
 router.post('/delete', async (req, res) => {
   try {
+    console.log("This is a test for Delete")
     const data = req.body;
     const query = `CALL sp_DeleteAdopter(?);`;
     await db.query(query, [data.adopterID]);

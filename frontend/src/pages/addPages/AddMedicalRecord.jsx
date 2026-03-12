@@ -1,33 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const AddMedicalRecord = () => {
   const navigate = useNavigate();
 
-  // temp but here so we can showcase the drop down options
-  const animalOptions = [
-    "Roman ID: 1",
-    "Calliope ID: 2",
-    "Arthur Pendragon ID: 3",
-    "Bella ID: 4"
-  ];
-
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+  const [allAnimals, setAllAnimals] = useState([])
   const [form, setForm] = useState({
-    animal: "",
+    animalID: "",
     appointmentDate: "",
     note: ""
   });
 
-  function handleChange(e) {
+  // Fetch animals from database
+  useEffect(() => {
+    fetch(backendURL + "/animals")
+      .then(res => res.json())
+      .then(data => {
+        // if no animals are found return an error
+        if (!data) {
+          console.error("Animal not found");
+          return;
+        }
+        // set animals to hook to use in form
+        setAllAnimals(data)
+      })
+      .catch(err => console.error("Error loading animal:", err));
+  }, []);
+
+
+
+
+  function onChange(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/medical-records");
+        try {
+      // sends the request to the server to create a new foster
+      const response = await fetch(
+        backendURL + "/medicalRecords/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(form),
+        }
+      );
+      // if the update went through send the user to the fosters page
+      if (response.ok) {
+        navigate("/medical-records");
+      }
+    } catch (error) {
+      console.error('Error adding a foster to the database', error);
+    }
   }
 
   return (
@@ -38,17 +69,21 @@ const AddMedicalRecord = () => {
 
         <p>
           <label>
-            Animal:
-            
+            Animal Name and ID:
+
             <select
-              name="animal"
-              value={form.animal}
-              onChange={handleChange}
+              name="animalID"
+              value={form.animalID}
+              onChange={onChange}
+              required
             >
-              <option value="">Select an animal</option>
-              {animalOptions.map((name) => (
-                <option key={name} value={name}>
-                  {name}
+              <option value="">Select Animal</option>
+
+              {allAnimals.map((animal) => (
+                <option
+                  key={animal.animalID}
+                  value={animal.animalID}>
+                  {animal.name}: {animal.animalID}
                 </option>
               ))}
             </select>
@@ -58,12 +93,12 @@ const AddMedicalRecord = () => {
         <p>
           <label>
             Appointment Date:
-            
+
             <input
               name="appointmentDate"
               type="datetime-local"
               value={form.appointmentDate}
-              onChange={handleChange}
+              onChange={onChange}
             />
           </label>
         </p>
@@ -71,11 +106,11 @@ const AddMedicalRecord = () => {
         <p>
           <label>
             Note:
-            
+
             <textarea
               name="note"
               value={form.note}
-              onChange={handleChange}
+              onChange={onChange}
             />
           </label>
         </p>
@@ -84,7 +119,7 @@ const AddMedicalRecord = () => {
 
       </form>
 
-      
+
       <Link to="/medical-records">Back</Link>
     </div>
   );

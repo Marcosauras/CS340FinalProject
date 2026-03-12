@@ -28,7 +28,7 @@ const Animals = () => {
     fetch(`${backendURL}/animals/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ delete_animal_id: animalID })
+      body: JSON.stringify({ deleteAnimalId: animalID })
     })
       .then(() => {
         // reloads the page to show updated database

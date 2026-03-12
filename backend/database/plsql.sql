@@ -331,7 +331,7 @@ CREATE PROCEDURE sp_CreateMedicalRecord(
     OUT p_id                INT
 )
 BEGIN
-    INSERT INTO MedicalRecordDetails (animalID, appointmentDate, note)
+    INSERT INTO MedicalRecords (animalID, appointmentDate, note)
     VALUES (p_animalID, p_appointmentDate, p_note);
 
     SELECT LAST_INSERT_ID() INTO p_id;
@@ -415,7 +415,7 @@ BEGIN
     FROM Applications 
     JOIN Animals ON Animals.animalID = Applications.animalID
     JOIN Adopters ON Adopters.adopterID = Applications.adopterID
-    ORDER BY applicationDate DESC;
+    ORDER BY Applications.applicationID DESC;
 END //
 
 DELIMITER ;

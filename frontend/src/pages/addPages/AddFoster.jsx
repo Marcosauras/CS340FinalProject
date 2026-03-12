@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const AddFoster = () => {
   const navigate = useNavigate();
-
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -20,7 +20,25 @@ const AddFoster = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/fosters");
+    try {
+      // sends the request to the server to create a new foster
+      const response = await fetch(
+        backendURL + "/fosters/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(form),
+        }
+      );
+      // if the update went through send the user to the fosters page
+      if (response.ok) {
+        navigate('/fosters');
+      }
+    } catch (error) {
+      console.error('Error adding a foster to the database', error);
+    }
   }
 
   return (

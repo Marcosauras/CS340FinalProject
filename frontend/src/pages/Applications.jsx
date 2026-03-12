@@ -38,7 +38,7 @@ const Applications = () => {
       .then(data => setApplications(data))
       .catch(err => console.error("Delete failed:", err));
   }
-
+  
   return (
     <div>
       <h3>Applications</h3>

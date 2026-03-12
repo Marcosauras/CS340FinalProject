@@ -8,10 +8,6 @@ const db = require('../database/db-connector');
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
 // Get all applications in the database
-router.get('/test', (req, res) => {
-  res.send('applications delete route file is loading');
-});
-
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query('CALL sp_GetApplications();');
@@ -63,11 +59,11 @@ router.post('/update', async (req, res) => {
     const query = `CALL sp_UpdateApplication(?, ?, ?, ?, ?, ?);`;
     await db.query(query, [
       data.applicationID,
-      data.animalID,
       data.adopterID,
-      data.status,
+      data.animalID,
       data.applicationDate,
-      data.adoptedDate,
+      data.status,
+      data.adoptedDate
     ]);
     res.status(200).json({ message: 'Application updated successfully' });
   } catch (err) {

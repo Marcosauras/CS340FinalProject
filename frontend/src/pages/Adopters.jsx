@@ -26,14 +26,14 @@ const Adopters = () => {
     const ok = window.confirm("Are you sure you want to delete this adopter?");
     if (!ok) return;
 
-    fetch(backendURL + "/adopters/delete", {
+    fetch(`${backendURL}/adopters/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ adopterID: adopterDeleteID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(backendURL + "/adopters");
+        return fetch(`${backendURL}/adopters`);
       })
       .then(res => res.json())
       .then(data => setAdopters(data))
@@ -70,7 +70,7 @@ const Adopters = () => {
                 <button type="button" onClick={() => handleEdit(adopter.adopterID)}>
                   Edit
                 </button>{" "}
-                <button type="button" onClick={() => handleDelete()}>
+                <button type="button" onClick={() => handleDelete(adopter.adopterID)}>
                   Delete
                 </button>
               </td>

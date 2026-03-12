@@ -28,7 +28,7 @@ function handleDelete(medicalRecordID) {
     fetch(backendURL + "/medicalRecords/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteMedicalRecordID: medicalRecordID })
+      body: JSON.stringify({ medicalRecordID: medicalRecordID })
     })
       .then(() => {
         // reloads the page to show updated database
