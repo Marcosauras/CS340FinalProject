@@ -62,8 +62,7 @@ const AnimalFosterDetails = () => {
         <tbody>
           {animalFosters.map((animalFost) => (
             <tr key={
-              animalFost.animalFosterDetailID ??
-              `${animalFosterDetailID}`
+              animalFost.animalFosterDetailID
             }>
               <td>{animalFost.animalName}: {animalFost.animalID}</td>
               <td>{animalFost.fosterName}: {animalFost.fosterID}</td>

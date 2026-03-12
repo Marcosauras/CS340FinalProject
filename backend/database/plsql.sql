@@ -415,7 +415,7 @@ BEGIN
     FROM Applications 
     JOIN Animals ON Animals.animalID = Applications.animalID
     JOIN Adopters ON Adopters.adopterID = Applications.adopterID
-    ORDER BY applicationDate DESC;
+    ORDER BY Applications.applicationID DESC;
 END //
 
 DELIMITER ;

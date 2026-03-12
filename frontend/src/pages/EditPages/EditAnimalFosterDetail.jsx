@@ -39,7 +39,7 @@ const EditAnimalFosterDetail = () => {
             .then(data => {
                 // if no animals are found return an error
                 if (!data) {
-                    console.error("No Adopters found");
+                    console.error("No animals found");
                     return;
                 }
 
@@ -89,7 +89,7 @@ const EditAnimalFosterDetail = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(backendURL + "/applications/update", {
+            const response = await fetch(backendURL + "/animalFosterDetails/update", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
 
@@ -101,7 +101,12 @@ const EditAnimalFosterDetail = () => {
                     endDate: form.startDate,
                 }),
             });
-
+            // if the response from doesn't go well return an error
+            if (!response.ok) {
+                console.error("Server error:");
+                return;
+            }
+            // Load the animal foster page to show the updated database
             navigate("/animals-fosters");
         } catch (err) {
             console.error("Animal Foster Details Update failed", err);
@@ -109,7 +114,6 @@ const EditAnimalFosterDetail = () => {
 
         
     };
-
     return (
         <div>
             <h2>Edit Animal's Foster Details</h2>
