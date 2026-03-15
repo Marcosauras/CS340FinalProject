@@ -1,27 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const AddApplication = () => {
   const navigate = useNavigate();
+  const backendURL = "http://classwork.engr.oregonstate.edu:63033";
+  
+  const [allAnimals, setAllAnimals] = useState([])
+  const [allAdopters, setAllAdopters] = useState([])
 
-  const adopterOptions = [
-    "Ben ID: 1",
-    "Lancelot ID: 2",
-    "Merlin ID: 3"
-  ];
-
-  const animalOptions = [
-    "Roman ID: 1",
-    "Calliope ID: 2",
-    "Arthur Pendragon ID: 3",
-    "Bella ID: 4"
-  ];
   const [form, setForm] = useState({
-    adopter: "",
-    animal: ""
+    adopterID: "",
+    animalID: ""
   });
 
-  function handleChange(e) {
+  // Fetch animals from database
+  useEffect(() => {
+    fetch(backendURL + "/animals")
+      .then(res => res.json())
+      .then(data => {
+        // if no animals are found return an error
+        if (!data) {
+          console.error("Animal not found");
+          return;
+        }
+        // set animals to hook to use in form
+        setAllAnimals(data)
+      })
+      .catch(err => console.error("Error loading animal:", err));
+  }, []);
+
+  // Gets the adopters data from the database to fill the dropdown
+  useEffect(() => {
+    fetch(backendURL + "/adopters")
+      .then(res => res.json())
+      .then(data => {
+        // if no adopter is found return an error
+        if (!data) {
+          console.error("No Adopters found");
+          return;
+        }
+
+        // set adopters to hook to use in form
+        setAllAdopters(data)
+      })
+      .catch(err => console.error("Error loading animal:", err));
+  }, []);
+
+  function onChange(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value
@@ -30,7 +55,34 @@ const AddApplication = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/applications");
+    
+    const status = "pending"
+    const applicationDate = new Date().toISOString();
+
+    try {
+      // sends the request to the server to create a new application
+      const response = await fetch(
+        backendURL + "/applications/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            animalID: Number(form.animalID),
+            adopterID: Number(form.adopterID),
+            status: status,
+            applicationDate: applicationDate
+          }),
+        }
+      );
+      // if the update went through send the user to the applications page
+      if (response.ok) {
+        navigate("/applications");
+      }
+    } catch (error) {
+      console.error('Error adding a foster to the database', error);
+    }
   }
   return (
     <div>
@@ -39,15 +91,21 @@ const AddApplication = () => {
       <form onSubmit={handleSubmit}>
         <p>
           <label>
-            Animal:
+            Animal Name and ID:
+
             <select
-              name="animal"
-              value={form.animal}
-              onChange={handleChange}
+              name="animalID"
+              value={form.animalID}
+              onChange={onChange}
+              required
             >
               <option value="">Select Animal</option>
-              {animalOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
+              {allAnimals.map((animal) => (
+                <option
+                  key={animal.animalID}
+                  value={animal.animalID}>
+                  {animal.name}: {animal.animalID}
+                </option>
               ))}
             </select>
           </label>
@@ -55,20 +113,26 @@ const AddApplication = () => {
 
         <p>
           <label>
-            Animal:
+            Adopter Name and ID:
             <select
-              name="adopter"
-              value={form.adopter}
-              onChange={handleChange}
+              name="adopterID"
+              value={form.adopterID}
+              onChange={onChange}
+              required
             >
               <option value="">Select Adopter</option>
-              {adopterOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
+
+              {allAdopters.map((adopter) => (
+                <option
+                  key={`adopter-${adopter.adopterID}`}
+                  value={String(adopter.adopterID)}
+                >
+                  {adopter.name}: {adopter.adopterID}
+                </option>
               ))}
             </select>
           </label>
         </p>
-
         <button type="submit">Save</button>
       </form>
 
