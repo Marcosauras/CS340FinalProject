@@ -34,18 +34,18 @@ const EditApplication = () => {
             .catch(err => console.error("Error loading animal:", err));
     }, []);
 
-    // Gets the animal data from the database to fill the dropdown
+    // Gets the adopters data from the database to fill the dropdown
     useEffect(() => {
         fetch(backendURL + "/adopters")
             .then(res => res.json())
             .then(data => {
-                // if no animals are found return an error
+                // if no adopter is found return an error
                 if (!data) {
                     console.error("No Adopters found");
                     return;
                 }
 
-                // set animals to hook to use in form
+                // set adopters to hook to use in form
                 setAllAdopters(data)
             })
             .catch(err => console.error("Error loading animal:", err));

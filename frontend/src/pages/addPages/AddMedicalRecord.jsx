@@ -8,7 +8,7 @@ const AddMedicalRecord = () => {
   const [allAnimals, setAllAnimals] = useState([])
   const [form, setForm] = useState({
     animalID: "",
-    appointmentDate: "",
+    
     note: ""
   });
 
