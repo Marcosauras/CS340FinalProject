@@ -20,25 +20,31 @@ const Applications = () => {
     navigate(`/applications/edit/${appID}`);
   }
 
+
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
   // this will delete the AnimalFoster Data from the current row
   function handleDelete(applicationID) {
     const ok = window.confirm("Are you sure you want to delete this Application?");
     if (!ok) return;
 
-    fetch(backendURL + "/applications/delete", {
+    fetch(`${backendURL}/applications/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deleteApplicationID: applicationID })
     })
       .then(() => {
-        // reloads the page to show updated database\
-        return fetch(backendURL + "/applications");
+        // reloads the page to show updated database
+        return fetch(`${backendURL}/applications`);
       })
       .then(res => res.json())
       .then(data => setApplications(data))
       .catch(err => console.error("Delete failed:", err));
   }
-  
+
   return (
     <div>
       <h3>Applications</h3>

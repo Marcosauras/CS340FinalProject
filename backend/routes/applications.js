@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../database/db-connector');
 
 // -- Citation for the following foster routes
-// -- 3/02/2022
+// -- 3/02/2026
 // -- Adapted from:
 // -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 

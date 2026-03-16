@@ -21,6 +21,10 @@ const Adopters = () => {
     navigate(`/adopters/edit/${AdopterID}`);
   }
 
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
   // this will delete the adopter from the current row
   function handleDelete(adopterDeleteID) {
     const ok = window.confirm("Are you sure you want to delete this adopter?");

@@ -9,7 +9,7 @@ const Animals = () => {
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(backendURL + "/animals")
+    fetch(`${backendURL}/animals`)
       .then(res => res.json())
       .then(data => setAnimals(data))
       .catch(err => console.error("Error fetching animals:", err));
@@ -19,6 +19,11 @@ const Animals = () => {
   function handleEdit(animalID) {
     navigate(`/animals/edit/${animalID}`);
   }
+
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
   // handles deleting the animal from the current row
   function handleDelete(animalID) {

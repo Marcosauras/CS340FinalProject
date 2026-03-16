@@ -16,7 +16,7 @@ const AddAnimalFosterDetail = () => {
 
   // Gets the fosters data from the database to fill the dropdown
   useEffect(() => {
-    fetch(backendURL + "/fosters")
+    fetch(`${backendURL}/fosters`)
       .then(res => res.json())
       .then(data => {
         // if no fosters is found return an error
@@ -33,7 +33,7 @@ const AddAnimalFosterDetail = () => {
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(backendURL + "/animals")
+    fetch(`${backendURL}/animals`)
       .then(res => res.json())
       .then(data => {
         // if no animals are found return an error
@@ -56,12 +56,16 @@ const AddAnimalFosterDetail = () => {
     });
   }
 
+  // Citation for the handle submit
+  // Date 3/03/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       // sends the request to the server to create a new adopter
       const response = await fetch(
-        backendURL + "/animalFosterDetails/create",
+        `${backendURL}/animalFosterDetails/create`,
         {
           method: "POST",
           headers: {
@@ -77,7 +81,7 @@ const AddAnimalFosterDetail = () => {
     } catch (error) {
       console.error('Error adding an adopter to the database', error);
     }
-    
+
   }
 
   return (
@@ -134,7 +138,7 @@ const AddAnimalFosterDetail = () => {
         <p>
           <label>
             Start Date:
-            
+
             <input
               name="startDate"
               type="datetime-local"
@@ -147,7 +151,7 @@ const AddAnimalFosterDetail = () => {
         <p>
           <label>
             End Date:
-            
+
             <input
               name="endDate"
               type="datetime-local"
@@ -161,7 +165,7 @@ const AddAnimalFosterDetail = () => {
 
       </form>
 
-      
+
       <Link to="/animals-fosters">Back</Link>
     </div>
   );

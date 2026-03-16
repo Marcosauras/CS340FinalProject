@@ -18,7 +18,7 @@ const EditAnimalFosterDetail = () => {
 
     // Gets the animal data from the database to fill the dropdown
     useEffect(() => {
-        fetch(backendURL + "/animals")
+        fetch(`${backendURL}/animals`)
             .then(res => res.json())
             .then(data => {
                 // if no animals are found return an error
@@ -34,7 +34,7 @@ const EditAnimalFosterDetail = () => {
 
     // Gets the animal data from the database to fill the dropdown
     useEffect(() => {
-        fetch(backendURL + "/fosters")
+        fetch(`${backendURL}/fosters`)
             .then(res => res.json())
             .then(data => {
                 // if no animals are found return an error
@@ -50,7 +50,7 @@ const EditAnimalFosterDetail = () => {
     }, []);
 
     useEffect(() => {
-        fetch(backendURL + "/animalFosterDetails")
+        fetch(`${backendURL}/animalFosterDetails`)
             .then(res => res.json())
             .then(data => {
                 const animalFosterDetailID = Number(id);
@@ -85,11 +85,16 @@ const EditAnimalFosterDetail = () => {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // Citation for the handle submit
+    // Date 3/09/2026
+    // Adapted from:
+    // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(backendURL + "/animalFosterDetails/update", {
+            const response = await fetch(`${backendURL}/animalFosterDetails/update`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
 
@@ -112,7 +117,7 @@ const EditAnimalFosterDetail = () => {
             console.error("Animal Foster Details Update failed", err);
         }
 
-        
+
     };
     return (
         <div>

@@ -1,3 +1,8 @@
+// -- Citation for the following sever.js setup
+// -- 2/10/2026
+// -- Adapted from:
+// -- Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
 const db = require('./database/db-connector');
 // Express library used to create a web server that will listen and respond to API calls from the frontend
 const express = require('express');

@@ -20,19 +20,24 @@ const Fosters = () => {
     navigate(`/fosters/edit/${fosterID}`);
   }
 
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
   // Will delete the values in the current row
   function handleDelete(fosterId) {
     const ok = window.confirm("Are you sure you want to delete this foster?");
     if (!ok) return;
 
-    fetch(backendURL + "/fosters/delete", {
+    fetch(`${backendURL}/fosters/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deleteFosterId: fosterId })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(backendURL + "/fosters");
+        return fetch(`${backendURL}/fosters`);
       })
       .then(res => res.json())
       .then(data => setFosters(data))

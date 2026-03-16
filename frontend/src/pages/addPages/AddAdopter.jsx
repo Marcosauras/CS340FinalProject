@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 export default function AddAdopter() {
   const navigate = useNavigate();
   const backendURL = "http://classwork.engr.oregonstate.edu:63033";
-  
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -19,12 +19,16 @@ export default function AddAdopter() {
     });
   }
 
+  // Citation for the handle submit
+  // Date 3/03/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       // sends the request to the server to create a new adopter
-      const response = await fetch(
-        backendURL + "/adopters/create",
+      const response = await fetch(`${backendURL}/adopters/create`,
         {
           method: "POST",
           headers: {
