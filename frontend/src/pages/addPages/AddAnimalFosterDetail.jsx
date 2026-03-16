@@ -56,6 +56,11 @@ const AddAnimalFosterDetail = () => {
     });
   }
 
+  // Citation for the handle submit
+  // Date 3/03/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -77,7 +82,7 @@ const AddAnimalFosterDetail = () => {
     } catch (error) {
       console.error('Error adding an adopter to the database', error);
     }
-    
+
   }
 
   return (
@@ -134,7 +139,7 @@ const AddAnimalFosterDetail = () => {
         <p>
           <label>
             Start Date:
-            
+
             <input
               name="startDate"
               type="datetime-local"
@@ -147,7 +152,7 @@ const AddAnimalFosterDetail = () => {
         <p>
           <label>
             End Date:
-            
+
             <input
               name="endDate"
               type="datetime-local"
@@ -161,7 +166,7 @@ const AddAnimalFosterDetail = () => {
 
       </form>
 
-      
+
       <Link to="/animals-fosters">Back</Link>
     </div>
   );

@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 const AddApplication = () => {
   const navigate = useNavigate();
   const backendURL = "http://classwork.engr.oregonstate.edu:63033";
-  
+
   const [allAnimals, setAllAnimals] = useState([])
   const [allAdopters, setAllAdopters] = useState([])
 
@@ -15,7 +15,7 @@ const AddApplication = () => {
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(backendURL + "/animals")
+    fetch(`${backendURL}/animals`)
       .then(res => res.json())
       .then(data => {
         // if no animals are found return an error
@@ -31,7 +31,7 @@ const AddApplication = () => {
 
   // Gets the adopters data from the database to fill the dropdown
   useEffect(() => {
-    fetch(backendURL + "/adopters")
+    fetch(`${backendURL}/adopters`)
       .then(res => res.json())
       .then(data => {
         // if no adopter is found return an error
@@ -53,9 +53,13 @@ const AddApplication = () => {
     });
   }
 
+  // Citation for the handle submit
+  // Date 3/03/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     const status = "pending"
     const applicationDate = new Date().toISOString();
 

@@ -9,7 +9,7 @@ const Fosters = () => {
 
   // Fetch fosters from database
   useEffect(() => {
-    fetch(`${backendURL}/fosters`)
+    fetch(backendURL + "/fosters")
       .then(res => res.json())
       .then(data => setFosters(data))
       .catch(err => console.error("Error fetching fosters:", err));
@@ -17,8 +17,13 @@ const Fosters = () => {
 
   // Handles the editing of the current row
   function handleEdit(fosterID) {
-    navigate(`/fosters/edit/${fosterID}`);
+    navigate("/fosters/edit/" + fosterID);
   }
+
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
   // Will delete the values in the current row
   function handleDelete(fosterId) {

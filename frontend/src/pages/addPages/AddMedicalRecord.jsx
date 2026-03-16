@@ -8,13 +8,13 @@ const AddMedicalRecord = () => {
   const [allAnimals, setAllAnimals] = useState([])
   const [form, setForm] = useState({
     animalID: "",
-    
+
     note: ""
   });
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(backendURL + "/animals")
+    fetch(`${backendURL}/animals`)
       .then(res => res.json())
       .then(data => {
         // if no animals are found return an error
@@ -38,9 +38,14 @@ const AddMedicalRecord = () => {
     });
   }
 
+  // Citation for the handle submit
+  // Date 3/03/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
   async function handleSubmit(e) {
     e.preventDefault();
-        try {
+    try {
       // sends the request to the server to create a new foster
       const response = await fetch(
         backendURL + "/medicalRecords/create",

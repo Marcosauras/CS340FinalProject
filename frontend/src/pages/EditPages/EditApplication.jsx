@@ -91,6 +91,11 @@ const EditApplication = () => {
         setForm(prev => ({ ...prev, [name]: value }));
     };
 
+    // Citation for the handle submit
+    // Date 3/09/2026
+    // Adapted from:
+    // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -138,7 +143,7 @@ const EditApplication = () => {
 
                             {allAdopters.map((adopter) => (
                                 <option
-                                    key={`adopter-${adopter.adopterID}`}
+                                    key={adopter.adopterID}
                                     value={String(adopter.adopterID)}
                                 >
                                     {adopter.name}: {adopter.adopterID}
@@ -161,7 +166,7 @@ const EditApplication = () => {
 
                             {allAnimals.map((animal) => (
                                 <option
-                                    key={`animal-${animal.animalID}`}
+                                    key={animal.animalID}
                                     value={String(animal.animalID)}
                                 >
                                     {animal.name}: {animal.animalID}

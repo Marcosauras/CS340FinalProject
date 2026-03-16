@@ -9,7 +9,7 @@ const MedicalRecords = () => {
 
   // Grab all the medical records from database
   useEffect(() => {
-    fetch(`${backendURL}/medicalRecords`)
+    fetch(backendURL + "/medicalRecords")
       .then(res => res.json())
       .then(data => setAnimalRecords(data))
       .catch(err => console.error("Error fetching medical records:", err));
@@ -17,14 +17,18 @@ const MedicalRecords = () => {
 
   // This will send the user to the edit page
   function handleEdit(medicalRecordID) {
-    navigate(`/medical-records/edit/${medicalRecordID}`);
+    navigate("/medical-records/edit/" + medicalRecordID);
   }
 
+  // Citation for the handle handle delte
+  // Date 3/08/2026
+  // Adapted from:
+  // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
   // this will delete the AnimalFoster Data from the current row
-function handleDelete(medicalRecordID) {
+  function handleDelete(medicalRecordID) {
     const ok = window.confirm("Are you sure you want to delete this Medical Record?");
     if (!ok) return;
-    
+
     fetch(backendURL + "/medicalRecords/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -85,6 +85,7 @@ const EditAnimalFosterDetail = () => {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -135,7 +136,7 @@ const EditAnimalFosterDetail = () => {
 
                             {allAnimals.map((animal) => (
                                 <option
-                                    key={`animal-${animal.animalID}`}
+                                    key={animal.animalID}
                                     value={String(animal.animalID)}
                                 >
                                     {animal.name}: {animal.animalID}
@@ -158,7 +159,7 @@ const EditAnimalFosterDetail = () => {
 
                             {allFosters.map((foster) => (
                                 <option
-                                    key={`foster-${foster.fosterID}`}
+                                    key={foster.fosterID}
                                     value={String(foster.fosterID)}
                                 >
                                     {foster.name}: {foster.fosterID}
