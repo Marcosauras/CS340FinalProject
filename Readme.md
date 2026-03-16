@@ -45,18 +45,23 @@ together in one place, allowing for the animals to all receive the proper care t
 The database has six main tables:
 
 ### 1. Animals
-Stores information about each animal, including name, species, breed, sex, and age. 
+
+Stores information about each animal, including name, species, breed, sex, and age.
 
 ### 2. Fosters
+
 Stores foster parent information such as name, phone, email, and capacity.
 
 ### 3. Adopters
+
 Stores information about people interested in adoption, including optional notes.
 
 ### 4. MedicalRecords
+
 Stores information around all medical concerns and appointments. Including appointment dates and care notes for each animal.
 
 ### 5. AnimalFosterDetails
+
 An intersection table between **Animals** and **Fosters**, that also lets the user keep track of which foster cared for which animal and when.
 
 ### 6. Applications
@@ -67,21 +72,27 @@ Tracks adoption applications by linking **Fosters** and **Animals**, that keeps 
 
 ## Citations
 
-
 ### README Template
+
 This readme is adapted from othneildrew Best-README-Template
-[Github link]https://github.com/othneildrew/Best-README-Template/edit/main/README.md
+[Github link](https://github.com/othneildrew/Best-README-Template/edit/main/README.md)
 
 ### REACT APP
+
 The creation of the base REACT app was made from following the steps provided in the Exploration - Web Application Technology
-[Web Application Technology] https://canvas.oregonstate.edu/courses/2031764/pages/exploration-web-application-technology-2?module_item_id=26243419
+[Web Application Technology](https://canvas.oregonstate.edu/courses/2031764/pages/exploration-web-application-technology-2?module_item_id=26243419)
 
 ### CRUD implimentation
-All CUD operations where adapted (for front and backend) from the examples shown in the exploration 
+
+All CUD operations where adapted (for front and backend) from the examples shown in the exploration
 "Exploration - Implementing CUD operations in your app"
-[Implementing CUD operations]https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
+[Implementing CUD operations](https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436)
+
+Creating SQL Procedures for the backend CRUD implementation
+[SQL Procedures](https://dev.mysql.com/doc/refman/8.0/en/stored-programs-defining.html)
 
 ### Formatting dates
+
 The formatting of the dates when sending info to the database was adapted from the following two sources to understand toisostring and how to use it for my needs
 https://www.w3schools.com/jsref/jsref_toisostring.asp
 https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
