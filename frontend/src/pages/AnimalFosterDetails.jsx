@@ -64,14 +64,19 @@ const AnimalFosterDetails = () => {
         </thead>
 
         <tbody>
+          {/* Citation for usage of toLocaleString */}
+          {/* Date: 3/16/2026 */}
+          {/* Adappted from */}
+          {/* Source URL: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString */}
+
           {animalFosters.map((animalFost) => (
             <tr key={
               animalFost.animalFosterDetailID
             }>
               <td>{animalFost.animalName}: {animalFost.animalID}</td>
               <td>{animalFost.fosterName}: {animalFost.fosterID}</td>
-              <td>{animalFost.startDate}</td>
-              <td>{animalFost.endDate ?? "NULL"}</td>
+              <td>{animalFost.startDate ? new Date(animalFost.startDate).toLocaleString(): "NULL"}</td>
+              <td>{animalFost.endDate ? new Date(animalFost.endDate).toLocaleString(): "NULL"}</td>
               <td>
                 <button onClick={() => handleEdit(animalFost.animalFosterDetailID)}>Edit</button>{" "}
                 <button onClick={() => handleDelete(animalFost.animalFosterDetailID)}>Delete</button>

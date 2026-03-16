@@ -63,12 +63,17 @@ const MedicalRecords = () => {
         </thead>
 
         <tbody>
+          {/* Citation for usage of toLocaleString */}
+          {/* Date: 3/16/2026 */}
+          {/* Adappted from */}
+          {/* Source URL: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString */}
+
           {animalRecords.map((medicalRec) => (
             <tr key={medicalRec.medicalRecordID}>
               <td>{medicalRec.medicalRecordID}</td>
               <td>{medicalRec.animalName}: {medicalRec.animalID}</td>
-              <td>{medicalRec.appointmentDate ?? "NULL"}</td>
-              <td>{medicalRec.note ?? "NULL"}</td>
+              <td>{medicalRec.appointmentDate ? new Date(medicalRec.appointmentDate).toLocaleString()  : "NULL"}</td>
+              <td>{medicalRec.note ? medicalRec.note: "NULL"}</td>
               <td>
                 <button onClick={() => handleEdit(medicalRec.medicalRecordID)}>Edit</button>{" "}
                 <button onClick={() => handleDelete(medicalRec.medicalRecordID)}>Delete</button>

@@ -67,14 +67,18 @@ const Applications = () => {
         </thead>
 
         <tbody>
+          {/* Citation for usage of toLocaleString */}
+          {/* Date: 3/16/2026 */}
+          {/* Adappted from */}
+          {/* Source URL: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString */}
           {applications.map((application) => (
             <tr key={application.applicationID}>
               <td>{application.applicationID}</td>
               <td>{application.adopterID}: {application.adopterName}</td>
               <td>{application.animalID}: {application.animalName}</td>
-              <td>{application.applicationDate}</td>
+              <td>{new Date(application.applicationDate).toLocaleString()}</td>
               <td>{application.status}</td>
-              <td>{application.adoptedDate ?? "NULL"}</td>
+              <td>{application.adoptedDate ? new Date(application.adoptedDate).toLocaleString(): "NULL"}</td>
               <td>
                 <button onClick={() => handleEdit(application.applicationID)}>Edit</button>{" "}
                 <button onClick={() => handleDelete(application.applicationID)}>Delete</button>
