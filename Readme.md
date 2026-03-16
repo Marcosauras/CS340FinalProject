@@ -82,6 +82,9 @@ All CUD operations where adapted (for front and backend) from the examples shown
 [Implementing CUD operations]https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
 ### Formatting dates
-The formatting of the dates in the website was adapted from the following two sources to understand toisostring and how to use it for my needs
+The formatting of the dates when sending info to the database was adapted from the following two sources to understand toisostring and how to use it for my needs
 https://www.w3schools.com/jsref/jsref_toisostring.asp
 https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+
+Formatting the dates on the main tables (medical records, applications and Animal Foster Details) was adapted from the toLocaleString examples
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
