@@ -9,7 +9,7 @@ const MedicalRecords = () => {
 
   // Grab all the medical records from database
   useEffect(() => {
-    fetch(`${backendURL}/medicalRecords`)
+    fetch(backendURL + "/medicalRecords")
       .then(res => res.json())
       .then(data => setAnimalRecords(data))
       .catch(err => console.error("Error fetching medical records:", err));
@@ -17,7 +17,7 @@ const MedicalRecords = () => {
 
   // This will send the user to the edit page
   function handleEdit(medicalRecordID) {
-    navigate(`/medical-records/edit/${medicalRecordID}`);
+    navigate("/medical-records/edit/" + medicalRecordID);
   }
 
   // Citation for the handle handle delte

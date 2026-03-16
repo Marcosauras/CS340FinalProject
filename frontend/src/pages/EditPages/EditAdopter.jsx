@@ -15,7 +15,7 @@ const EditAdopter = () => {
   });
 
   useEffect(() => {
-    fetch(`${backendURL}/adopters`)
+    fetch(backendURL + "/adopters")
       .then(res => res.json())
       .then(data => {
         const adopterID = Number(id);
@@ -42,7 +42,7 @@ const EditAdopter = () => {
   };
 
   // Citation for the handle submit
-  // Date 3/09/2026
+  // Date 3/03/2026
   // Adapted from:
   // Source URL: https://canvas.oregonstate.edu/courses/2031764/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26243436
 
@@ -51,7 +51,7 @@ const EditAdopter = () => {
 
     //send the updated values to the sql database
     try {
-      const response = await fetch(`${backendURL}/adopters/update`, {
+      const response = await fetch(backendURL + "/adopters/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // set values that are allowed to be null to null if it is not found

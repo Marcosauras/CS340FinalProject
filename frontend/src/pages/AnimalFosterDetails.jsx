@@ -9,7 +9,7 @@ const AnimalFosterDetails = () => {
 
   // Fetch all the animal foster details from database
   useEffect(() => {
-    fetch(`${backendURL}/animalFosterDetails`)
+    fetch(backendURL+ "/animalFosterDetails")
       .then((res) => res.json())
       .then((data) => setAnimalFosters(data))
       .catch((err) => console.error("Error fetching animal foster details:", err));
@@ -18,7 +18,7 @@ const AnimalFosterDetails = () => {
 
   // This will send the user to the edit page
   function handleEdit(animalFosterDetailID) {
-    navigate(`/animals-fosters/edit/${animalFosterDetailID}`);
+    navigate("/animals-fosters/edit/" + animalFosterDetailID);
   }
 
   // Citation for the handle handle delte
@@ -30,14 +30,14 @@ const AnimalFosterDetails = () => {
     const ok = window.confirm("Are you sure you want to delete this Foster?");
     if (!ok) return;
 
-    fetch(`${backendURL}/animalFosterDetails/delete`, {
+    fetch(backendURL+ "/animalFosterDetails/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ animalFosterDetailID: animalFosterDetailID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/animalFosterDetails`);
+        return fetch(backendURL+ "/animalFosterDetails");
       })
       .then(res => res.json())
       .then(data => setAnimalFosters(data))

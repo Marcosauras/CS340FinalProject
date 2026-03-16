@@ -9,7 +9,7 @@ const Animals = () => {
 
   // Fetch animals from database
   useEffect(() => {
-    fetch(`${backendURL}/animals`)
+    fetch(backendURL+ "/animals")
       .then(res => res.json())
       .then(data => setAnimals(data))
       .catch(err => console.error("Error fetching animals:", err));
@@ -17,7 +17,7 @@ const Animals = () => {
 
   // Handles the editing of the current row
   function handleEdit(animalID) {
-    navigate(`/animals/edit/${animalID}`);
+    navigate("/animals/edit/" + animalID);
   }
 
   // Citation for the handle handle delte
@@ -30,14 +30,14 @@ const Animals = () => {
     const ok = window.confirm("Delete this animal?");
     if (!ok) return;
 
-    fetch(`${backendURL}/animals/delete`, {
+    fetch(backendURL+ "/animals/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deleteAnimalId: animalID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/animals`);
+        return fetch(backendURL+ "/animals");
       })
       .then(res => res.json())
       .then(data => setAnimals(data))

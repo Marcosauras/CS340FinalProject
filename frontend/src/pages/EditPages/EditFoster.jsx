@@ -15,7 +15,7 @@ const EditFoster = () => {
     });
 
     useEffect(() => {
-        fetch(`${backendURL}/fosters`)
+        fetch(backendURL + "/fosters")
             .then(res => res.json())
             .then(data => {
                 const fosterID = Number(id);
@@ -50,7 +50,7 @@ const EditFoster = () => {
         e.preventDefault();
         try {
             // attempts request to the server to update the foster
-            const response = await fetch(`${backendURL}/fosters/update`, {
+            const response = await fetch(backendURL + "/fosters/update", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

@@ -9,7 +9,7 @@ const Applications = () => {
 
   // Fetch applications from database
   useEffect(() => {
-    fetch(`${backendURL}/applications`)
+    fetch(backendURL+ "/applications")
       .then(res => res.json())
       .then(data => setApplications(data))
       .catch(err => console.error("Error fetching applications:", err));
@@ -17,7 +17,7 @@ const Applications = () => {
 
   // This will send the user to the edit page
   function handleEdit(appID) {
-    navigate(`/applications/edit/${appID}`);
+    navigate("/applications/edit/" + appID);
   }
 
 
@@ -31,14 +31,14 @@ const Applications = () => {
     const ok = window.confirm("Are you sure you want to delete this Application?");
     if (!ok) return;
 
-    fetch(`${backendURL}/applications/delete`, {
+    fetch(backendURL+ "/applications/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deleteApplicationID: applicationID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/applications`);
+        return fetch(backendURL+ "/applications");
       })
       .then(res => res.json())
       .then(data => setApplications(data))

@@ -10,7 +10,7 @@ const Adopters = () => {
 
   // Fetch applications from database
   useEffect(() => {
-    fetch(`${backendURL}/adopters`)
+    fetch(backendURL + "/adopters")
       .then(res => res.json())
       .then(data => setAdopters(data))
       .catch(err => console.error("Error fetching adopters:", err));
@@ -18,7 +18,7 @@ const Adopters = () => {
 
   // This will send the user to the edit page
   function handleEdit(AdopterID) {
-    navigate(`/adopters/edit/${AdopterID}`);
+    navigate("/adopters/edit/" + AdopterID);
   }
 
   // Citation for the handle handle delte
@@ -30,14 +30,14 @@ const Adopters = () => {
     const ok = window.confirm("Are you sure you want to delete this adopter?");
     if (!ok) return;
 
-    fetch(`${backendURL}/adopters/delete`, {
+    fetch(backendURL + "/adopters/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ adopterID: adopterDeleteID })
     })
       .then(() => {
         // reloads the page to show updated database
-        return fetch(`${backendURL}/adopters`);
+        return fetch(backendURL + "/adopters");
       })
       .then(res => res.json())
       .then(data => setAdopters(data))

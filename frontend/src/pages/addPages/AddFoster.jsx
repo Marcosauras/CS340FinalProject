@@ -27,7 +27,8 @@ const AddFoster = () => {
     e.preventDefault();
     try {
       // sends the request to the server to create a new foster
-      const response = await fetch(`${backendURL}/fosters/create`,
+      const response = await fetch(
+        backendURL + "/fosters/create",
         {
           method: "POST",
           headers: {

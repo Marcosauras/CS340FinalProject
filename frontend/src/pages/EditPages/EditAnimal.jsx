@@ -18,7 +18,7 @@ const EditAnimal = () => {
 
   // Gets the animal data from the database to fill the form
   useEffect(() => {
-    fetch(`${backendURL}/animals`)
+    fetch(backendURL + "/animals")
       .then(res => res.json())
       .then(data => {
         const animalID = Number(id);
@@ -54,7 +54,7 @@ const EditAnimal = () => {
     e.preventDefault();
     // send the updated values to the sql database 
     try {
-      const response = await fetch(`${backendURL}/animals/update`, {
+      const response = await fetch(backendURL + "/animals/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // set values that are allowed to be null to null if it is not found

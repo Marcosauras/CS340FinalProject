@@ -47,7 +47,8 @@ const AddMedicalRecord = () => {
     e.preventDefault();
     try {
       // sends the request to the server to create a new foster
-      const response = await fetch(`${backendURL}/medicalRecords/create`,
+      const response = await fetch(
+        backendURL + "/medicalRecords/create",
         {
           method: "POST",
           headers: {
