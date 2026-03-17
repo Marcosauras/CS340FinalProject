@@ -77,6 +77,9 @@ Tracks adoption applications by linking **Fosters** and **Animals**, that keeps 
 This readme is adapted from othneildrew Best-README-Template
 [Github link](https://github.com/othneildrew/Best-README-Template/edit/main/README.md)
 
+The shields were adapted from the sheilds.io static badges
+[Shields Link](https://shields.io)
+
 ### REACT APP
 
 The creation of the base REACT app was made from following the steps provided in the Exploration - Web Application Technology
